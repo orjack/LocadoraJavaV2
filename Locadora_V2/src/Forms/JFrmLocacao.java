@@ -1,5 +1,6 @@
 package Forms;
 
+import ControlersDao.MediaDao;
 import Model.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,10 +11,12 @@ import javax.swing.table.DefaultTableModel;
 
 public class JFrmLocacao extends javax.swing.JFrame {
 
-    LocacaoBean locacao = new LocacaoBean();
+    LocacaoBean locacao;
     float total = 0;
     Object titulo[] = {"Mídia", "Valor", "Tipo"};
     Object grade[][] = null;
+    ArrayList<ClienteBean> clientes;
+
     
     DefaultTableModel model = new DefaultTableModel(grade, titulo);
 
@@ -255,7 +258,11 @@ public class JFrmLocacao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-       
+        String data = (new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));
+        jftData_locacao.setText(data);
+        jftData_locacao.setEditable(false);
+        
+        
     }//GEN-LAST:event_formWindowOpened
 
     private void jbtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddActionPerformed
@@ -267,11 +274,27 @@ public class JFrmLocacao extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnExitActionPerformed
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
-       
+        int id_cliente = Integer.valueOf(jtxtId.getText()); 
+        locacao = new LocacaoBean();
+         
+        locacao.setCliente(clientes.get(id_cliente));
+        locacao.setData_locacao(jftData_locacao.getText());
+        
+        ArrayList<LocacaoBean> locacoes = new ArrayList();
+        for (LocacaoBean list : locacoes) {
+            locacao.setMidias(list.getMidias());
+            System.out.println(list.getMidias());
+        }
+        
+        
+         
+         
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
     private void jbtnSearchClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSearchClienteActionPerformed
        
+        
+        
     }//GEN-LAST:event_jbtnSearchClienteActionPerformed
 
     private void jtxtIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtxtIdMouseClicked
