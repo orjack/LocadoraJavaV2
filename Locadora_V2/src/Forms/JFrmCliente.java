@@ -608,22 +608,23 @@ public class JFrmCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnExitActionPerformed
 
     private void jbtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDeleteActionPerformed
-//        selected_index = jtbCliente.getSelectedRow();
-//        if (selected_index != -1) {
-//            if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o cliente?", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-//                try {
-//                    ClienteBean cliente = new ClienteBean();
-//                    ClienteDao.delete(cliente);
-//                    JOptionPane.showMessageDialog(this, "Removido com sucesso!");
-//                    load_table();
-//                } catch (Exception ex) {
-//                    System.out.println(ex.getMessage());
-//                    JOptionPane.showMessageDialog(this, "Erro ao deletar");
-//                }
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Selecione um cliente!");
-//        }
+       int selected_index = jtbCliente.getSelectedRow();
+        if (selected_index != -1) {
+            if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o cliente?", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                try {
+                    ClienteBean cliente = new ClienteBean();
+                    cliente.setId(Integer.valueOf(jtxtId.getText()));
+                    ClienteDao.delete(cliente);
+                    JOptionPane.showMessageDialog(this, "Removido com sucesso!");
+                    load_table();
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                    JOptionPane.showMessageDialog(this, "Erro ao deletar");
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um cliente!");
+        }
     }//GEN-LAST:event_jbtnDeleteActionPerformed
 
     private void jbtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEditActionPerformed

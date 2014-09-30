@@ -1,8 +1,12 @@
 package ControlersDao;
 
 import Model.AutorBean;
+import Model.DiretorBean;
+import Model.FornecedorBean;
 import Model.MidiaBean;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class MediaDao {
     private static final String TABLE_NAME = "Media";
@@ -46,5 +50,54 @@ public class MediaDao {
             System.out.println("REJEITADO");
         }
         
+    }
+    
+    public static ArrayList<MidiaBean> all() {
+        ArrayList<MidiaBean> medias = new ArrayList();
+        String query = "SELECT * FROM " + TABLE_NAME;
+        
+        try {
+            ConnectionDao.open();
+            ConnectionDao.prepSt = ConnectionDao.con.prepareStatement(query);
+            ResultSet rs = ConnectionDao.prepSt.executeQuery();
+            
+            while (rs.next()) {
+                MidiaBean media = new MidiaBean();
+                media.setId(rs.getInt("id"));
+                
+                media.setGrupo(rs.getString("grupo"));
+                media.setGenero(rs.getString("genero"));
+                media.setCensura(rs.getString("censura"));
+                media.setTitulo(rs.getString("titulo"));
+                media.setCategoria(rs.getString("categoria"));
+                media.setData_lancamento(rs.getString("lancamento"));
+                media.setSinopse(rs.getString("sinopse"));
+                media.setValor_custo(rs.getString("valor_compra"));
+                media.setQuantidade(rs.getString("quantidade"));
+                media.setValor_locacao(rs.getString("valor_locacao"));
+                
+                medias.add(media);
+            }
+            rs.close();
+            
+            
+        } catch(SQLException ex) {}
+        
+        return medias;
+    }
+    
+    public static void delete(MidiaBean media) {
+        ConnectionDao.open();
+        String query = "DELETE FROM "+ TABLE_NAME +" WHERE id = ?";
+        try {
+            
+            ConnectionDao.prepSt = ConnectionDao.con.prepareStatement(query);
+            ConnectionDao.prepSt.setInt(1, media.getId());
+            ConnectionDao.prepSt.executeUpdate();
+            ConnectionDao.close();
+            System.out.println("DELETADO COMS SUCESSO!");
+        } catch(SQLException ex) {
+            System.out.println("ERRO AO DELETAR");
+        }
     }
 }

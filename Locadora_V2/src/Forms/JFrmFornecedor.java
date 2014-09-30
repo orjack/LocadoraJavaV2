@@ -486,6 +486,7 @@ public class JFrmFornecedor extends javax.swing.JFrame {
         
         dao.save(fornecedor);
         clear();
+        load_table();
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed

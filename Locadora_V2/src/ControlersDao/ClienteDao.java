@@ -45,4 +45,19 @@ public class ClienteDao {
 
         }
     }
+    
+    public static void delete(ClienteBean cliente) {
+        ConnectionDao.open();
+        String query = "DELETE FROM "+ TABLE_NAME +" WHERE id = ?";
+        try {
+            
+            ConnectionDao.prepSt = ConnectionDao.con.prepareStatement(query);
+            ConnectionDao.prepSt.setInt(1, cliente.getId());
+            ConnectionDao.prepSt.executeUpdate();
+            ConnectionDao.close();
+            System.out.println("DELETADO COMS SUCESSO!");
+        } catch(SQLException ex) {
+            System.out.println("ERRO AO DELETAR");
+        }
+    }
 }

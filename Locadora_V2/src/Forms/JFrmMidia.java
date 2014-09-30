@@ -7,10 +7,12 @@ import ControlersDao.MediaDao;
 import Model.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class JFrmMidia extends javax.swing.JFrame {
     MidiaBean media;
     MediaDao dao;
+    DefaultTableModel model;
     
     //LISTANDO OS DIRETORES
     ArrayList<DiretorBean> diretores;
@@ -18,13 +20,14 @@ public class JFrmMidia extends javax.swing.JFrame {
     ArrayList<AutorBean> autores;
     //LISTANDO OS FORNECEDORES
     ArrayList<FornecedorBean> fornecedores;
-    
+    //LISTANDO AS MIDIAS
+    ArrayList<MidiaBean> list;
     public JFrmMidia() {
         initComponents();
         setLocationRelativeTo(null);
         media = new MidiaBean();
         dao = new MediaDao();
-        
+        loadTable();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -463,12 +466,14 @@ public class JFrmMidia extends javax.swing.JFrame {
         media.setQuantidade(jsQuantidade.getValue().toString());
         
         dao.save(media);
+        clear();
+        loadTable();
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
     private void jbtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDeleteActionPerformed
        
     }//GEN-LAST:event_jbtnDeleteActionPerformed
-
+        
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         fornecedores = FornecedorDao.all();
         for (FornecedorBean fornecedor : fornecedores) {
@@ -482,8 +487,7 @@ public class JFrmMidia extends javax.swing.JFrame {
         for (AutorBean autor: autores) {
             jcbxAutor.addItem(autor.getId() + " - "+ autor.getNome());
         }
-        
-        
+        loadTable();
     }//GEN-LAST:event_formWindowOpened
 
     private void jtbMidiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbMidiaMouseClicked
@@ -500,32 +504,32 @@ public class JFrmMidia extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jbtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEditActionPerformed
-//        selected_index = jtbMidia.getSelectedRow();
-//        
-//        if (selected_index != -1) {
-//            MidiaBean media = list_media.get(selected_index);
-//            
-//            jtxtId.setText(String.valueOf(media.getId()));
-//            jcbxFornecedor.setSelectedItem(media.getFornecedor());
-//            jcbxGrupo.setSelectedItem(media.getGrupo());
-//            jcbxGenero.setSelectedItem(media.getGenero());
-//            jcbxCensura.setSelectedItem(media.getCensura());
-//            jtxtTitulo.setText(media.getTitulo());
-//            jcbxAutor.setSelectedItem(media.getAutor());
-//            jcbxDiretor.setSelectedItem(media.getDiretor());
-//            jcbxCategoria.setSelectedItem(media.getCategoria());
-//            jftData_lancamento.setText(media.getData_lancamento());
-//            jtxtSinopse.setText(media.getSinopse());
-//            jftValor_compra.setText(media.getValor_custo());
-//            jftValor_locacao.setText(media.getValor_locacao());
-//            jsQuantidade.setValue(media.getQuantidade());
-//            
-//            jTPanel.setEnabledAt(1, true);
-//            jTPanel.setSelectedComponent(jpCadastroMidias);
-//            jbtnSave.setEnabled(true);
+        int selected_index = jtbMidia.getSelectedRow();
+        
+        if (selected_index != -1) {
+            media = list.get(selected_index);
+            
+            jtxtId.setText(String.valueOf(media.getId()));
+            jcbxFornecedor.setSelectedItem(media.getFornecedor());
+            jcbxGrupo.setSelectedItem(media.getGrupo());
+            jcbxGenero.setSelectedItem(media.getGenero());
+            jcbxCensura.setSelectedItem(media.getCensura());
+            jtxtTitulo.setText(media.getTitulo());
+            jcbxAutor.setSelectedItem(media.getAutor());
+            jcbxDiretor.setSelectedItem(media.getDiretor());
+            jcbxCategoria.setSelectedItem(media.getCategoria());
+            jftData_lancamento.setText(media.getData_lancamento());
+            jtxtSinopse.setText(media.getSinopse());
+            jftValor_compra.setText(media.getValor_custo());
+            jftValor_locacao.setText(media.getValor_locacao());
+            jsQuantidade.setValue(media.getQuantidade());
+            
+            jTPanel.setEnabledAt(1, true);
+            jTPanel.setSelectedComponent(jpCadastroMidias);
+            jbtnSave.setEnabled(true);
 
-//        }else
-//         JOptionPane.showMessageDialog(null, "Selecione um cliente"); 
+        }else
+         JOptionPane.showMessageDialog(null, "Selecione um cliente"); 
     }//GEN-LAST:event_jbtnEditActionPerformed
 
     private void jbtnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnNewActionPerformed
@@ -590,7 +594,21 @@ public class JFrmMidia extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
 
-    public void load_table(){
-        
+    public void loadTable(){
+        Object titulo[] = {"Código", "Título", "Valor Compra", "Valor Locação", "Quantidade"};
+        Object grade[][] = null;
+        model = new DefaultTableModel(grade, titulo);
+        jtbMidia.setModel(model);
+        this.list = MediaDao.all();
+        for(MidiaBean _midia: list){
+            Object campo[] = {
+                _midia.getId(), 
+                _midia.getTitulo(),
+                _midia.getValor_custo(), 
+                _midia.getValor_locacao(), 
+                _midia.getQuantidade()};
+            model.addRow(campo);
+            
+        }
     }
 }

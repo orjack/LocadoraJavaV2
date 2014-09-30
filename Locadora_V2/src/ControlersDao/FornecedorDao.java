@@ -58,19 +58,19 @@ public class FornecedorDao {
                 FornecedorBean fornecedor = new FornecedorBean();
                 fornecedor.setId(rs.getInt("id"));
                 fornecedor.setRazao_social(rs.getString("razao_social"));
-                fornecedor.setCnpj("cnpj");
-                fornecedor.setInscricao_estadual("ie");
+                fornecedor.setCnpj(rs.getString("cnpj"));
+                fornecedor.setInscricao_estadual(rs.getString("ie"));
                 
-                fornecedor.setCep("cep");
-                fornecedor.setLogradouro("logradouro");
-                fornecedor.setNumero_logradouro("numero_logradouro");
-                fornecedor.setBairro("bairro");
-                fornecedor.setMunicipio("municipio");
-                fornecedor.setUf("uf");
+                fornecedor.setCep(rs.getString("cep"));
+                fornecedor.setLogradouro(rs.getString("logradouro"));
+                fornecedor.setNumero_logradouro(rs.getString("numero_logradouro"));
+                fornecedor.setBairro(rs.getString("bairro"));
+                fornecedor.setMunicipio(rs.getString("municipio"));
+                fornecedor.setUf(rs.getString("uf"));
                 
-                fornecedor.setNumero_residencial("telefone");
-                fornecedor.setNumero_celular("celular");
-                fornecedor.setEmail("email");
+                fornecedor.setNumero_residencial(rs.getString("telefone"));
+                fornecedor.setNumero_celular(rs.getString("celular"));
+                fornecedor.setEmail(rs.getString("email"));
                 
                 fornecedores.add(fornecedor);
             }
