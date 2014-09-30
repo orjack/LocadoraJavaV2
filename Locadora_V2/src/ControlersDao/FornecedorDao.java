@@ -96,4 +96,41 @@ public class FornecedorDao {
             System.out.println("ERRO AO DELETAR");
         }
     }
+
+    public static FornecedorBean get(int id) {
+        System.out.println(id);
+        FornecedorBean fornecedor = new FornecedorBean();
+        try {
+            ConnectionDao.open();
+            String query = "SELECT * FROM " + TABLE_NAME 
+                        + " WHERE `id` = " + id;
+            ConnectionDao.prepSt = ConnectionDao.con.prepareCall(query);
+            ResultSet rs = ConnectionDao.prepSt.executeQuery();
+            
+            if(rs.next()) {
+                fornecedor.setId(rs.getInt("id"));
+                fornecedor.setRazao_social(rs.getString("razao_social"));
+                fornecedor.setCnpj(rs.getString("cnpj"));
+                fornecedor.setInscricao_estadual(rs.getString("ie"));
+                fornecedor.setCep(rs.getString("cep"));
+                fornecedor.setLogradouro(rs.getString("logradouro"));
+                fornecedor.setNumero_logradouro(rs.getString("numero_logradouro"));
+                fornecedor.setBairro(rs.getString("bairro"));
+                fornecedor.setMunicipio(rs.getString("municipio"));
+                fornecedor.setUf(rs.getString("uf"));
+                
+                fornecedor.setNumero_residencial(rs.getString("telefone"));
+                fornecedor.setNumero_celular(rs.getString("celular"));
+                fornecedor.setEmail(rs.getString("email"));
+            }
+            
+            ConnectionDao.close();
+            
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Não existe este registro");
+        }
+        return fornecedor;
+    }
+
 }

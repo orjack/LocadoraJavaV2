@@ -88,7 +88,6 @@ public class AutorDao {
             
             if(rs.next()) {
                 autor.setNome(rs.getString("nome"));
-                
             }
             
             ConnectionDao.close();

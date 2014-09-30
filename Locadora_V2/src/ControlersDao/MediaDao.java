@@ -64,11 +64,13 @@ public class MediaDao {
             while (rs.next()) {
                 MidiaBean media = new MidiaBean();
                 media.setId(rs.getInt("id"));
-                
+                media.setFornecedor(FornecedorDao.get(rs.getInt("id")));
                 media.setGrupo(rs.getString("grupo"));
                 media.setGenero(rs.getString("genero"));
                 media.setCensura(rs.getString("censura"));
                 media.setTitulo(rs.getString("titulo"));
+                media.setAutor(AutorDao.get(rs.getInt("id")));
+                media.setDiretor(DiretorDao.get(rs.getInt("id")));
                 media.setCategoria(rs.getString("categoria"));
                 media.setData_lancamento(rs.getString("lancamento"));
                 media.setSinopse(rs.getString("sinopse"));

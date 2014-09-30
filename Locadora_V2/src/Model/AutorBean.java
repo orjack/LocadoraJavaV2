@@ -3,6 +3,7 @@ package Model;
 public class AutorBean {
     private int id;
     private String nome;
+    private int situacao;
 
     public int getId() {
         return id;
@@ -18,5 +19,13 @@ public class AutorBean {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public int getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(int situacao) {
+        this.situacao = situacao;
     }
 }

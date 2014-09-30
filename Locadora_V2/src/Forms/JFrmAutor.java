@@ -17,6 +17,7 @@ public class JFrmAutor extends javax.swing.JFrame {
     
     public JFrmAutor() {
         initComponents();
+        jcbSituacao.setVisible(false);
         setLocationRelativeTo(null); 
         instance = new AutorBean();
     }
@@ -30,6 +31,7 @@ public class JFrmAutor extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jtxtId = new javax.swing.JTextField();
         jtxtNome = new javax.swing.JTextField();
+        jcbSituacao = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jbtnDelete = new javax.swing.JButton();
         jbtnSave = new javax.swing.JButton();
@@ -55,6 +57,9 @@ public class JFrmAutor extends javax.swing.JFrame {
 
         jLabel2.setText("Nome:");
 
+        jcbSituacao.setSelected(true);
+        jcbSituacao.setText("Ativo");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -63,15 +68,18 @@ public class JFrmAutor extends javax.swing.JFrame {
                 .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jtxtId, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jtxtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jtxtId, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jtxtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jcbSituacao)
+                        .addGap(16, 16, 16))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -83,7 +91,8 @@ public class JFrmAutor extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jtxtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtxtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcbSituacao))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
@@ -208,38 +217,40 @@ public class JFrmAutor extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDeleteActionPerformed
+        int id = Integer.valueOf(jtxtId.getText());
+        selected_index = jtbLista.getSelectedRow();
         
-        int id = Integer.valueOf(Integer.valueOf(jtxtId.getText()));
-        AutorBean autor = new AutorBean();
-        autor.setId(id);
-        AutorDao.delete(autor);
-//        selected_index = jtbLista.getSelectedRow();
-//        if (selected_index != -1) {
-//            if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o autor?", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-//                list.remove(selected_index);
-//
-//                try {
-//                    AutorDao.delete();
-//                    load_table();
-//                    clear();
-//                    JOptionPane.showMessageDialog(null, "Registro excluido com sucesso!");
-//                } catch (Exception ex) {
-//                    JOptionPane.showMessageDialog(null, "Erro ao excluir este registro!");
-//                }
-//            }
-//        }
+        if (selected_index != -1) {
+            if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o autor?", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                list.remove(selected_index);
+
+                try {
+                    AutorBean autor = new AutorBean();
+                    autor.setId(id);
+                    AutorDao.delete(autor);
+                    loadTable();
+                    clear();
+                    
+                    JOptionPane.showMessageDialog(null, "Registro excluido com sucesso!");
+                    
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao excluir este registro!");
+                }
+            }
+        }
     }//GEN-LAST:event_jbtnDeleteActionPerformed
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
         instance.setNome(jtxtNome.getText());
-        dao.save(instance);
+        AutorDao.save(instance);
+        loadTable();
     }//GEN-LAST:event_jbtnSaveActionPerformed
          
     private void jtbListaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbListaMouseClicked
@@ -249,6 +260,11 @@ public class JFrmAutor extends javax.swing.JFrame {
             AutorBean autor = list.get(selected_index);
             jtxtId.setText(String.valueOf(autor.getId()));
             jtxtNome.setText(autor.getNome());
+            if (autor.getSituacao() == 1) {
+                jcbSituacao.setSelected(true);
+                jcbSituacao.setText("Ativo");
+            }else
+                jcbSituacao.setText("Inativo");
         }
     }//GEN-LAST:event_jtbListaMouseClicked
 
@@ -257,7 +273,8 @@ public class JFrmAutor extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnExitActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        load_table();
+        jtxtId.setEnabled(false);
+        loadTable();
     }//GEN-LAST:event_formWindowOpened
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -278,19 +295,23 @@ public class JFrmAutor extends javax.swing.JFrame {
     private javax.swing.JButton jbtnDelete;
     private javax.swing.JButton jbtnExit;
     private javax.swing.JButton jbtnSave;
+    private javax.swing.JCheckBox jcbSituacao;
     private javax.swing.JTable jtbLista;
     private javax.swing.JTextField jtxtId;
     private javax.swing.JTextField jtxtNome;
     // End of variables declaration//GEN-END:variables
 
     private void clear(){
-//        jtxtId.setText(null);
-//        jtxtNome.setText(null);
-//        is_update = false;
-//        selected_index = -1;
+        jtxtId.setText(null);
+        jtxtId.setEnabled(false);
+        
+        jtxtNome.setText(null);
+        is_update = false;
+        selected_index = -1;
+        AutorBean autor = new AutorBean();
     }
 
-    private void load_table(){
+    private void loadTable(){
         Object titulo[] = {"Código", "Nome"};
         Object grade[][] = null;
         model = new DefaultTableModel(grade, titulo);
