@@ -2,30 +2,38 @@ package Forms;
 
 import ControlersDao.AutorDao;
 import Model.AutorBean;
+import java.awt.HeadlessException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class JFrmAutor extends javax.swing.JFrame {
+    //Instancia da DAO de Autor
+    AutorDao dao;
+    //Instancia da classe AutorBean
+    AutorBean autor;
+    //List de autores
     ArrayList<AutorBean> list;
+    
+    DefaultTableModel model;
     int selected_index = -1;
     boolean is_update = false;
-    DefaultTableModel model;
-    private AutorDao dao;
-    AutorBean instance;
-
     
     public JFrmAutor() {
         initComponents();
         jcbSituacao.setVisible(false);
-        setLocationRelativeTo(null); 
-        instance = new AutorBean();
+        setLocationRelativeTo(null);
+        dao = new AutorDao();
+        autor = new AutorBean();
+        autor.setSituacao(1);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jpmMenu = new javax.swing.JPopupMenu();
+        jmAlterar = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -40,6 +48,24 @@ public class JFrmAutor extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtbLista = new javax.swing.JTable();
+
+        jpmMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+                jpmMenuAncestorMoved(evt);
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+
+        jmAlterar.setText("Alterar");
+        jmAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmAlterarActionPerformed(evt);
+            }
+        });
+        jpmMenu.add(jmAlterar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -186,6 +212,7 @@ public class JFrmAutor extends javax.swing.JFrame {
                 "Código", "Nome"
             }
         ));
+        jtbLista.setComponentPopupMenu(jpmMenu);
         jtbLista.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jtbLista.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -240,7 +267,7 @@ public class JFrmAutor extends javax.swing.JFrame {
                     
                     JOptionPane.showMessageDialog(null, "Registro excluido com sucesso!");
                     
-                } catch (Exception ex) {
+                } catch (HeadlessException ex) {
                     JOptionPane.showMessageDialog(null, "Erro ao excluir este registro!");
                 }
             }
@@ -248,24 +275,17 @@ public class JFrmAutor extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnDeleteActionPerformed
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
-        instance.setNome(jtxtNome.getText());
-        AutorDao.save(instance);
+        autor.setNome(jtxtNome.getText());
+        autor.setSituacao(jcbSituacao.isSelected() == true ? 1 : 2);
+        
+        dao.save(autor);
+        
         loadTable();
+        clear();
     }//GEN-LAST:event_jbtnSaveActionPerformed
          
     private void jtbListaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbListaMouseClicked
-        selected_index = jtbLista.getSelectedRow();
-        if(selected_index != -1) {
-            is_update = true;
-            AutorBean autor = list.get(selected_index);
-            jtxtId.setText(String.valueOf(autor.getId()));
-            jtxtNome.setText(autor.getNome());
-            if (autor.getSituacao() == 1) {
-                jcbSituacao.setSelected(true);
-                jcbSituacao.setText("Ativo");
-            }else
-                jcbSituacao.setText("Inativo");
-        }
+        
     }//GEN-LAST:event_jtbListaMouseClicked
 
     private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
@@ -283,6 +303,24 @@ public class JFrmAutor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
+    private void jpmMenuAncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jpmMenuAncestorMoved
+    }//GEN-LAST:event_jpmMenuAncestorMoved
+
+    private void jmAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmAlterarActionPerformed
+        selected_index = jtbLista.getSelectedRow();
+        
+        if(selected_index != -1) {
+            autor = list.get(selected_index);
+
+            jtxtId.setText(String.valueOf(autor.getId()));
+            jtxtNome.setText(autor.getNome());
+            jcbSituacao.setVisible(true);
+            jcbSituacao.setSelected(autor.getSituacao() == 1);
+
+        }
+    }//GEN-LAST:event_jmAlterarActionPerformed
+
+//<editor-fold defaultstate="collapsed" desc="Componentes">
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -296,11 +334,14 @@ public class JFrmAutor extends javax.swing.JFrame {
     private javax.swing.JButton jbtnExit;
     private javax.swing.JButton jbtnSave;
     private javax.swing.JCheckBox jcbSituacao;
+    private javax.swing.JMenuItem jmAlterar;
+    private javax.swing.JPopupMenu jpmMenu;
     private javax.swing.JTable jtbLista;
     private javax.swing.JTextField jtxtId;
     private javax.swing.JTextField jtxtNome;
     // End of variables declaration//GEN-END:variables
-
+//</editor-fold>
+    
     private void clear(){
         jtxtId.setText(null);
         jtxtId.setEnabled(false);
@@ -308,7 +349,7 @@ public class JFrmAutor extends javax.swing.JFrame {
         jtxtNome.setText(null);
         is_update = false;
         selected_index = -1;
-        AutorBean autor = new AutorBean();
+        autor = new AutorBean();
     }
 
     private void loadTable(){
@@ -318,8 +359,8 @@ public class JFrmAutor extends javax.swing.JFrame {
         jtbLista.setModel(model);
         this.list = AutorDao.all();
 
-        for(AutorBean autor: list){
-            Object campos[] = {String.format("%05d", autor.getId()), autor.getNome()};
+        for(AutorBean _autor: list){
+            Object campos[] = {String.format("%05d", _autor.getId()), _autor.getNome()};
             model.addRow(campos);
         }
     }

@@ -28,4 +28,8 @@ public class AutorBean {
     public void setSituacao(int situacao) {
         this.situacao = situacao;
     }
+    
+    public String getSituacaoDisplay() {
+        return this.situacao == 1 ? "Ativo" : "Inativo";
+    }
 }

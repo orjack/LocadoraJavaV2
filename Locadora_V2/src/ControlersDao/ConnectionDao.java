@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ConnectionDao {
     private static final String USER = "admin";
@@ -34,6 +35,19 @@ public class ConnectionDao {
             
         }
     }
+
+    public static PreparedStatement getPreparedStatement(String query) {
+        try {
+            ConnectionDao.open();
+            
+            return con.prepareStatement(query);
+            
+        } catch (SQLException ex) {
+            System.out.println("Falha ao recuperar Statement");
+        }
+        
+        return null;
+    }
     
     public static void close() {
         try {
@@ -43,6 +57,15 @@ public class ConnectionDao {
             prepSt = null;
             con = null;
         }catch (SQLException ex) {
+            System.out.println("Erro ao fechar a conexão!");
+        }
+    }
+    
+    public static void close(PreparedStatement preparedStatement) {
+        try {
+            preparedStatement.close();
+            preparedStatement.getConnection().close();
+        } catch (SQLException ex) {
             System.out.println("Erro ao fechar a conexão!");
         }
     }

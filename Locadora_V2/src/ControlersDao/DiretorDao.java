@@ -2,6 +2,7 @@
 package ControlersDao;
 
 import Model.DiretorBean;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,21 +10,27 @@ import java.util.ArrayList;
 public class DiretorDao {
     private static final String TABLE_NAME = "Diretor";
     
-    public static void save(DiretorBean diretor) {  
+    public void save(DiretorBean diretor) {  
         try {
             ConnectionDao.open();
+            
+            PreparedStatement prepSt;
             String query;
+            
             if(diretor.getId() > 0) {
                 query = "UPDATE"+ TABLE_NAME
-                        + "SET nome ="
-                        + "WHERE id=?";
+                        + "SET nome =?, situacao=? WHERE id=?";
+                prepSt = ConnectionDao.getPreparedStatement(query);
+                prepSt.setString(1, diretor.getNome());
+                prepSt.setInt(2, diretor.getSitucacao());
+                prepSt.setInt(3, diretor.getId());
             } else {
                 query = "INSERT INTO "+ TABLE_NAME +"(nome)"
                         + "VALUES(?)";
+                prepSt = ConnectionDao.getPreparedStatement(query);
+                prepSt.setString(1, diretor.getNome());
             }
-            ConnectionDao.prepSt = ConnectionDao.con.prepareStatement(query);
-            ConnectionDao.prepSt.setString(1, diretor.getNome());
-            ConnectionDao.prepSt.executeUpdate();
+            prepSt.executeUpdate();
             
             ConnectionDao.close();
             
@@ -33,7 +40,7 @@ public class DiretorDao {
         
     }
     
-    public static void delete(DiretorBean diretor) {
+    public void delete(DiretorBean diretor) {
         ConnectionDao.open();
         String query = "DELETE FROM "+ TABLE_NAME +" WHERE id = ?";
         try {
@@ -46,7 +53,7 @@ public class DiretorDao {
         }
     }
     
-    public static ArrayList<DiretorBean> all() {
+    public ArrayList<DiretorBean> all() {
         ArrayList<DiretorBean> instance = new ArrayList();
         try {
             ConnectionDao.open();
@@ -59,6 +66,7 @@ public class DiretorDao {
                 DiretorBean diretor = new DiretorBean();
                 diretor.setId(rs.getInt("id"));
                 diretor.setNome(rs.getString("nome"));
+                diretor.setSituacao(rs.getInt("situacao"));
                 instance.add(diretor);
             }
             rs.close();
@@ -75,7 +83,7 @@ public class DiretorDao {
         return instance;
     }
     
-    public static DiretorBean get(int id) {
+    public DiretorBean get(int id) {
         System.out.println(id);
         DiretorBean diretor = new DiretorBean();
         try {
@@ -86,7 +94,9 @@ public class DiretorDao {
             ResultSet rs = ConnectionDao.prepSt.executeQuery();
             
             if(rs.next()) {
+                diretor.setId(rs.getInt("id"));
                 diretor.setNome(rs.getString("nome"));
+                diretor.setSituacao(rs.getInt("situacao"));
                 
             }
             

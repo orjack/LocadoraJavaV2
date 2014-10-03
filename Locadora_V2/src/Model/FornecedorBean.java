@@ -9,15 +9,16 @@ public class FornecedorBean {
     //Endereco
     private String cep;
     private String logradouro;
-    private String numero_logradouro;
+    private int numero_logradouro;
     private String bairro;
     private String municipio;
-    private String uf;
+    private int uf;
     
     //Contato
     private String numero_celular;
     private String numero_residencial;
     private String Email;
+    private int situacao;
 
 
     public int getId() {
@@ -38,10 +39,10 @@ public class FornecedorBean {
     public void setLogradouro(String logradouro) {
         this.logradouro = logradouro;
     }
-    public String getNumero_logradouro() {
+    public int getNumero_logradouro() {
         return numero_logradouro;
     }
-    public void setNumero_logradouro(String numero_logradouro) {
+    public void setNumero_logradouro(int numero_logradouro) {
         this.numero_logradouro = numero_logradouro;
     }
     public String getBairro() {
@@ -60,11 +61,11 @@ public class FornecedorBean {
         this.municipio = municipio;
     }
 
-    public String getUf() {
+    public int getUf() {
         return uf;
     }
 
-    public void setUf(String uf) {
+    public void setUf(int uf) {
         this.uf = uf;
     }
 
@@ -113,5 +114,14 @@ public class FornecedorBean {
 
     public void setInscricao_estadual(String inscricao_estadual) {
         this.inscricao_estadual = inscricao_estadual;
+    }
+
+    public int getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(int situacao) {
+        Integer.valueOf(situacao == 1 ? "Ativo" : "Inativo");
+        this.situacao = situacao;
     }
 }

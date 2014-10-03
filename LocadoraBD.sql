@@ -6,34 +6,34 @@ use locadora;
 CREATE TABLE IF NOT EXISTS `Autor` (
 	  `id`          INT                     NOT NULL AUTO_INCREMENT,
 	  `nome`        VARCHAR(80)             NOT NULL,
-	  `situacao`	INT 					NOT NULL DEFAULT=1,
+	  `situacao`	INT 					NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `Diretor` (
 	  `id`          INT                     NOT NULL AUTO_INCREMENT,
 	  `nome`        VARCHAR(80)             NOT NULL,
-	  `situacao`	INT 					NOT NULL DEFAULT=1,
+	  `situacao`	INT 					NOT NULL DEFAULT 1,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `Cliente` (
 	`id`                   INT              NOT NULL AUTO_INCREMENT,
 	`nome`                 VARCHAR(80)      NOT NULL,
-	`cpf`                  VARCHAR(12)      NOT NULL,
-	`rg`                   VARCHAR(11)      NULL,
+	`cpf`                  VARCHAR(14)      NOT NULL,
+	`rg`                   VARCHAR(12)      NULL,
 	`data_nascimento`      DATE             NOT NULL,
-	`sexo`                 VARCHAR(1)       NOT NULL,
-	`cep`                  VARCHAR(10)      NULL,
+	`sexo`                 INT       		NOT NULL,
+	`cep`                  VARCHAR(9)      	NULL,
 	`logradouro`           VARCHAR(80)      NULL,
 	`numero_logradouro`    INT              NULL,
 	`bairro`               VARCHAR(80)      NULL,
 	`municipio`            INT              NULL,
 	`uf`                   VARCHAR(2)       NULL,
 	`telefone`             VARCHAR(14)      NULL,
-	`celular`              VARCHAR(14)      NULL,
+	`celular`              VARCHAR(15)      NULL,
 	`email`                VARCHAR(30)      NULL,
-	`situacao`             INT		NOT NULL DEFAULT=1,
+	`situacao`             INT		NOT NULL DEFAULT 1,
 
   PRIMARY KEY (id)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `Fornecedor` (
 	`telefone`            VARCHAR(15)      NULL,
 	`celular`             VARCHAR(15)      NULL,
 	`email`               VARCHAR(30)      NULL,
-	`situacao`            INT              NOT NULL DEFAULT=1,
+	`situacao`            INT              NOT NULL DEFAULT 1,
 
 PRIMARY KEY (id)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `Media` (
 	`valor_compra`      DECIMAL(10,2)    NULL,
 	`quantidade`        INT 		     NULL,
 	`valor_locacao`     DECIMAL(10,2)    NULL,
-	`situacao`	INT 					 NOT NULL DEFAULT=1,
+	`situacao`	INT 					 NOT NULL DEFAULT 1,
 
 PRIMARY KEY (id),
 CONSTRAINT `FK_FORNECEDOR` FOREIGN KEY ( `fornecedor` ) REFERENCES `Fornecedor` ( `id` ) ,
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `Locacao` (
 	`valor_pago`      DECIMAL(10,2) NULL,
 	`data_locacao`    DATETIME() 	NOT NULL,
 	`data_devolucao`  DATETIME() 	NULL,
-	`situacao`        INT          	NOT NULL DEFAULT=1,
+	`situacao`        INT          	NOT NULL DEFAULT 1,
 
 PRIMARY KEY (id),
 CONSTRAINT `FK_CLIENTE` FOREIGN KEY ( `cliente` ) REFERENCES `Cliente` ( `id` ) ,

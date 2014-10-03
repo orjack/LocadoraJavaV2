@@ -2,6 +2,7 @@
 package ControlersDao;
 
 import Model.AutorBean;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,23 +11,29 @@ import java.util.ArrayList;
 public class AutorDao {
     private static final String TABLE_NAME = "Autor";
     
-    public static void save(AutorBean autor) {  
+    public void save(AutorBean autor) {
         try {
             ConnectionDao.open();
-            String query;
-            if(autor.getId() > 0) {
-                query = "UPDATE"+ TABLE_NAME
-                        + "SET nome ="
-                        + "WHERE id=?";
-            } else {
-                query = "INSERT INTO "+ TABLE_NAME +"(nome)"
-                        + "VALUES(?)";
-            }
-            ConnectionDao.prepSt = ConnectionDao.con.prepareStatement(query);
-            ConnectionDao.prepSt.setString(1, autor.getNome());
-            ConnectionDao.prepSt.executeUpdate();
             
-            ConnectionDao.close();
+            PreparedStatement prepSt;
+            String query;
+            
+            if (autor.getId() > 0) {
+                query = "UPDATE "+ TABLE_NAME
+                    + " SET nome= ?, situacao= ? WHERE id= ?";
+                prepSt = ConnectionDao.getPreparedStatement(query);
+                prepSt.setString(1, autor.getNome());
+                prepSt.setInt(2, autor.getSituacao());
+                prepSt.setInt(3, autor.getId());
+            } else {
+                query = "INSERT INTO "+ TABLE_NAME +" (nome)"
+                    + " VALUES(?)";
+                prepSt = ConnectionDao.getPreparedStatement(query);
+                prepSt.setString(1, autor.getNome());
+            }
+            
+            prepSt.executeUpdate();
+            ConnectionDao.close(prepSt);
             
         } catch(SQLException ex) {
             System.out.println("Erro ao inserir registro no Banco");
@@ -60,6 +67,7 @@ public class AutorDao {
                 AutorBean autor = new AutorBean();
                 autor.setId(rs.getInt("id"));
                 autor.setNome(rs.getString("nome"));
+                autor.setSituacao(rs.getInt("situacao"));
                 instance.add(autor);
             }
             rs.close();
@@ -87,7 +95,9 @@ public class AutorDao {
             ResultSet rs = ConnectionDao.prepSt.executeQuery();
             
             if(rs.next()) {
+                autor.setId(rs.getInt("id"));
                 autor.setNome(rs.getString("nome"));
+                autor.setSituacao(rs.getInt("situacao"));
             }
             
             ConnectionDao.close();
