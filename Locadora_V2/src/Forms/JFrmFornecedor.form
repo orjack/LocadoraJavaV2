@@ -252,18 +252,16 @@
                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jPanel5" max="32767" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                              <Component id="jrbAtivo" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jrbInativo" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
                           <Component id="jPanel6" alignment="0" max="32767" attributes="0"/>
                           <Component id="jPanel7" alignment="0" max="32767" attributes="0"/>
                           <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="108" max="-2" attributes="0"/>
+                      <Component id="jcbSituacao" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -276,12 +274,9 @@
                       <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jrbAtivo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jrbInativo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jcbSituacao" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -424,7 +419,7 @@
                                   <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                                   <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jtxtNumero_logradouro" min="-2" pref="64" max="-2" attributes="0"/>
+                                  <Component id="jtxtNumeroLogradouro" min="-2" pref="64" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jtxtBairro" alignment="0" min="-2" pref="307" max="-2" attributes="0"/>
                           </Group>
@@ -443,7 +438,7 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jtxtLogradouro" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jtxtNumero_logradouro" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jtxtNumeroLogradouro" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -476,7 +471,7 @@
                     <Property name="text" type="java.lang.String" value="N&#xba;:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jtxtNumero_logradouro">
+                <Component class="javax.swing.JTextField" name="jtxtNumeroLogradouro">
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel6">
                   <Properties>
@@ -553,7 +548,7 @@
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jtxtNumero_residencial" pref="160" max="32767" attributes="0"/>
+                                  <Component id="jtxtNumeroTelefone" pref="160" max="32767" attributes="0"/>
                                   <Component id="jtxtNumero_celular" max="32767" attributes="0"/>
                               </Group>
                               <Component id="jtxtEmail" min="-2" pref="343" max="-2" attributes="0"/>
@@ -568,7 +563,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jtxtNumero_residencial" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jtxtNumeroTelefone" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -591,7 +586,7 @@
                     <Property name="text" type="java.lang.String" value="Telefone:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jtxtNumero_residencial">
+                <Component class="javax.swing.JTextField" name="jtxtNumeroTelefone">
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel11">
                   <Properties>
@@ -645,21 +640,9 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JRadioButton" name="jrbAtivo">
+            <Component class="javax.swing.JCheckBox" name="jcbSituacao">
               <Properties>
-                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="jrbGroup_Situacao"/>
-                </Property>
-                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Ativo"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JRadioButton" name="jrbInativo">
-              <Properties>
-                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="jrbGroup_Situacao"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Inativo"/>
               </Properties>
             </Component>
           </SubComponents>

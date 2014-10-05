@@ -5,11 +5,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class ConnectionDao {
-    private static final String USER = "admin";
-    private static final String PASSWORD = "@m4st3r";//unopar123
+    private static final String USER = "root";
+    private static final String PASSWORD = "";//unopar123
     private static final String DATABASE = "locadora";
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     private static final String CONNECTION_STRING = "jdbc:mysql://localhost:3306/" + DATABASE;

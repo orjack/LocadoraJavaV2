@@ -1,28 +1,29 @@
 package Forms;
 
+import ControlersDao.ClienteDao;
+import ControlersDao.LocacaoDao;
 import ControlersDao.MediaDao;
 import Model.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class JFrmLocacao extends javax.swing.JFrame {
-
+    ClienteDao clienteDao;
     LocacaoBean locacao;
     float total = 0;
-    Object titulo[] = {"Mídia", "Valor", "Tipo"};
+    Object titulo[] = {"ID", "Mídia", "Valor", "Tipo"};
     Object grade[][] = null;
     ArrayList<ClienteBean> clientes;
-
-    
-    DefaultTableModel model = new DefaultTableModel(grade, titulo);
-
+    DefaultTableModel model;
+    MidiaBean midia;
     public JFrmLocacao() {
         initComponents();
         setLocationRelativeTo(null);
+        model = new DefaultTableModel(grade, titulo);
+        clienteDao = new ClienteDao();
     }
 
     @SuppressWarnings("unchecked")
@@ -115,7 +116,7 @@ public class JFrmLocacao extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jcbxMidia, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jbtnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Media/Icons/Add.png"))); // NOI18N
@@ -266,7 +267,22 @@ public class JFrmLocacao extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void jbtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddActionPerformed
-    
+    try{
+        MediaDao midiaDao = new MediaDao();
+        midia = midiaDao.get(jcbxMidia.getSelectedIndex() + 1);
+        Object campos[] = {
+            midia.getId(),
+            midia.getTitulo(),
+            midia.getValorLocacao(),
+            midia.getGrupo()
+        };
+        model.addRow(campos);
+        jtbLocacao.setModel(model);
+        total += Double.valueOf(midia.getValorLocacao());
+        jtxtValor_total.setText(String.valueOf(total));
+            
+        } catch (Exception ex){
+        }    
     }//GEN-LAST:event_jbtnAddActionPerformed
 
     private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
@@ -274,27 +290,29 @@ public class JFrmLocacao extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnExitActionPerformed
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
-        int id_cliente = Integer.valueOf(jtxtId.getText()); 
-        locacao = new LocacaoBean();
-         
-        locacao.setCliente(clientes.get(id_cliente));
-        locacao.setData_locacao(jftData_locacao.getText());
+        LocacaoDao dao = new LocacaoDao();
+        locacao = new LocacaoBean();        
+        ClienteBean cliente = new ClienteBean();
+        cliente.setId(Integer.valueOf(jtxtId.getText()));
+        locacao.setCliente(cliente);
+        locacao.setValor_pago(total);
+        locacao.setData_locacao(jftData_locacao.getText().toString());
         
-        ArrayList<LocacaoBean> locacoes = new ArrayList();
-        for (LocacaoBean list : locacoes) {
-            locacao.setMidias(list.getMidias());
-            System.out.println(list.getMidias());
+        for (int i = 0; i < jtbLocacao.getRowCount(); i++) {
+            locacao.addMidia(midia);
+            System.out.println("MMMMM" + midia.getId());
         }
-        
-        
-         
-         
+        dao.save(locacao);
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
     private void jbtnSearchClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSearchClienteActionPerformed
-       
         
-        
+        clienteDao.get(Integer.valueOf(jtxtId.getText()));
+        MediaDao midiaDao = new MediaDao();    
+        ArrayList<MidiaBean> midias = midiaDao.all();
+            for (MidiaBean m : midias) {
+                jcbxMidia.addItem(m.getId() + " - " + m.getTitulo());
+            }
     }//GEN-LAST:event_jbtnSearchClienteActionPerformed
 
     private void jtxtIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtxtIdMouseClicked

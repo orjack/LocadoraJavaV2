@@ -26,7 +26,10 @@ public class DiretorBean {
     }
 
     public void setSituacao(int situacao) {
-        Integer.valueOf(situacao == 1 ? "Ativo" : "Inativo");
         this.situacao = situacao;
+    }
+    
+    public String getSituacaoDisplay() {
+        return this.situacao == 1 ? "Ativo" : "Inativo";
     }
 }

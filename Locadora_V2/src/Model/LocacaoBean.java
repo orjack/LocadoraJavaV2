@@ -7,7 +7,7 @@ public class LocacaoBean {
     private int id;
     private ClienteBean cliente;
     private ArrayList<MidiaBean> midias;
-    private String valor_pago;
+    private double valor_pago;
     private String data_locacao;
     private String data_devolucao;
     private int situacao;
@@ -74,11 +74,11 @@ public class LocacaoBean {
         this.midias = midias;
     }
 
-    public String getValor_pago() {
+    public double getValor_pago() {
         return valor_pago;
     }
 
-    public void setValor_pago(String valor_pago) {
+    public void setValor_pago(double valor_pago) {
         this.valor_pago = valor_pago;
     }
 

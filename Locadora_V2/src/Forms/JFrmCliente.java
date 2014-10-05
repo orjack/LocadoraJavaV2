@@ -18,12 +18,13 @@ public class JFrmCliente extends javax.swing.JFrame {
     
     int selected_index = -1;
     
-    private static final DateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("dd/mm/yyyy");
+    private static final DateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     
     public JFrmCliente() {
         initComponents();
         setLocationRelativeTo(null);
         dao = new ClienteDao();
+        cliente = new ClienteBean();    
     }
 
     @SuppressWarnings("unchecked")
@@ -507,7 +508,7 @@ public class JFrmCliente extends javax.swing.JFrame {
                             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 12, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(116, 116, 116)
@@ -577,47 +578,24 @@ public class JFrmCliente extends javax.swing.JFrame {
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
         try {
-            if(cliente.getId() == Integer.valueOf(jtxtId.getText())) {
-                
-                cliente.setNome(jtxtNome.getText());
-                cliente.setCpf(jftxCpf.getText());
-                cliente.setRg(jftxRg.getText());
-                cliente.setDataNascimento(SHORT_DATE_FORMAT.parse(jftNascimento.getText()));
-                cliente.setSexo((jrbMasculino.isSelected() ? 1 : 2));
-                cliente.setCep(jftxCep.getText());
-                cliente.setLogradouro(jtxtLogradouro.getText());
-                cliente.setNumeroLogradouro(Integer.valueOf(jtxtNumeroLogradouro.getText()));
-                cliente.setBairro(jtxtBairro.getText());
-                cliente.setMunicipio(jcbxMunicipio.getSelectedIndex()+1);
-                cliente.setUf(jcbxUf.getSelectedItem().toString());
-                cliente.setNumeroTelefone(jftxTelefone.getText());
-                cliente.setNumeroCelular(jftxCelular.getText());
-                cliente.setEmail(jtxtEmail.getText());  
-                cliente.setSituacao(jcbSituacao.isSelected() == true ? 1 : 2);  
-                cliente.setId(Integer.valueOf(jtxtId.getText()));
-                dao.update(cliente);
-
-            }
-            else {
-                cliente = new ClienteBean();    
-                cliente.setNome(jtxtNome.getText());
-                cliente.setCpf(jftxCpf.getText());
-                cliente.setRg(jftxRg.getText());
-                cliente.setDataNascimento(SHORT_DATE_FORMAT.parse(jftNascimento.getText()));
-                cliente.setSexo((jrbMasculino.isSelected() ? 1 : 2));
-                cliente.setCep(jftxCep.getText());
-                cliente.setLogradouro(jtxtLogradouro.getText());
-                cliente.setNumeroLogradouro(Integer.valueOf(jtxtNumeroLogradouro.getText()));
-                cliente.setBairro(jtxtBairro.getText());
-                cliente.setMunicipio(jcbxMunicipio.getSelectedIndex()+1);
-                cliente.setUf(jcbxUf.getSelectedItem().toString());
-                cliente.setNumeroTelefone(jftxTelefone.getText());
-                cliente.setNumeroCelular(jftxCelular.getText());
-                cliente.setEmail(jtxtEmail.getText());        
-                dao.save(cliente);
-            }
-            clear();
+            cliente.setNome(jtxtNome.getText());
+            cliente.setCpf(jftxCpf.getText());
+            cliente.setRg(jftxRg.getText());
+            cliente.setDataNascimento(SHORT_DATE_FORMAT.parse(jftNascimento.getText()));
+            cliente.setSexo((jrbMasculino.isSelected() ? 1 : 2));
+            cliente.setCep(jftxCep.getText());
+            cliente.setLogradouro(jtxtLogradouro.getText());
+            cliente.setNumeroLogradouro(Integer.valueOf(jtxtNumeroLogradouro.getText()));
+            cliente.setBairro(jtxtBairro.getText());
+            cliente.setMunicipio(jcbxMunicipio.getSelectedIndex()+1);
+            cliente.setUf(jcbxUf.getSelectedItem().toString());
+            cliente.setNumeroTelefone(jftxTelefone.getText());
+            cliente.setNumeroCelular(jftxCelular.getText());
+            cliente.setEmail(jtxtEmail.getText());  
+            cliente.setSituacao(jcbSituacao.isSelected() == true ? 1 : 2);  
+            dao.save(cliente);
             loadTable();
+            clear();
         } catch (ParseException ex) {
             System.out.println("FAIL TO CONVERT DATE");
         }
@@ -629,10 +607,7 @@ public class JFrmCliente extends javax.swing.JFrame {
 
     private void jbtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDeleteActionPerformed
         int id = (Integer)model.getValueAt(jtbCliente.getSelectedRow(), 0);
-
-        System.out.println(id);
         selected_index = jtbCliente.getSelectedRow();
-        
         if (selected_index != -1) {
             System.out.println(jtxtId.getText());
             if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o cliente?", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -641,9 +616,7 @@ public class JFrmCliente extends javax.swing.JFrame {
                     cliente.setId(id);
                     dao.delete(cliente);
                     loadTable();
-                    
                     JOptionPane.showMessageDialog(this, "Removido com sucesso!");
-                    
                 } catch (HeadlessException ex) {
                     JOptionPane.showMessageDialog(this, "Erro ao deletar");
                 }
@@ -657,18 +630,15 @@ public class JFrmCliente extends javax.swing.JFrame {
         int id = (Integer)model.getValueAt(jtbCliente.getSelectedRow(), 0);
         jcbSituacao.setVisible(true);
         selected_index = jtbCliente.getSelectedRow();
-
         if (selected_index != -1) {
             cliente = list.get(selected_index);
             dao.get(cliente.getId());
             jtxtId.setText(String.valueOf(id));
-            
             jftxCpf.setText(cliente.getCpf());
             jftxRg.setText(cliente.getRg());
             jtxtNome.setText(cliente.getNome());
-            jftNascimento.setText(String.valueOf(cliente.getDataNascimento()));
+            jftNascimento.setText(String.valueOf(SHORT_DATE_FORMAT.format(cliente.getDataNascimento())));
             if(cliente.getSexo() == 1 ? jrbMasculino.isSelected() : jrbFemenino.isSelected()) {}
-            
             jftxCep.setText(cliente.getCep());
             jtxtLogradouro.setText(cliente.getLogradouro());
             jtxtNumeroLogradouro.setText(String.valueOf(cliente.getNumeroLogradouro()));
@@ -680,9 +650,7 @@ public class JFrmCliente extends javax.swing.JFrame {
             jtxtEmail.setText(cliente.getEmail());
             jcbSituacao.setSelected((cliente.getSituacao() == 1));
             
-            
             jTPanel.setEnabledAt(1, true);
-            
             jTPanel.setSelectedComponent(jPanel2);
             jbtnSave.setEnabled(true);
         }
@@ -693,20 +661,7 @@ public class JFrmCliente extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         loadTable();
         jTPanel.setEnabledAt(1, false);
-        jtxtNome.setText("Thiago Almeida");
-        jftxCpf.setText("22222222222");
-        jftxRg.setText("33333333");
-        jftNascimento.setText("01012000");
-        
-        jftxCep.setText("080750440");
-        jtxtLogradouro.setText("Rua Joao Siqueira");
-        jtxtNumeroLogradouro.setText("12312");
-        jtxtBairro.setText("BAIRRO");
-        
-        jftxTelefone.setText("3333333333");
-        jftxCelular.setText("99999999999");
-        jtxtEmail.setText("Email");
-
+        clear();
     }//GEN-LAST:event_formWindowOpened
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -716,7 +671,8 @@ public class JFrmCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jbtnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnNewActionPerformed
-        
+        clear();
+        jtxtId.setEditable(false);
         jTPanel.setEnabledAt(1, true);
         jcbSituacao.setVisible(false);
         jTPanel.setSelectedComponent(jPanel2);
@@ -778,6 +734,7 @@ public class JFrmCliente extends javax.swing.JFrame {
 //</editor-fold>
     
     public void clear(){
+        jtxtId.setEditable(false);
         jtxtId.setText(null);
         jftxCpf.setText(null);
         jftxRg.setText(null);
@@ -794,7 +751,7 @@ public class JFrmCliente extends javax.swing.JFrame {
         jftxTelefone.setText(null);
         jftxCelular.setText(null);
         jtxtEmail.setText(null);
-        jcbSituacao.isSelected();
+        jcbSituacao.setVisible(false);
         selected_index = -1;
         cliente = new ClienteBean();
         jTPanel.setEnabledAt(0, true);

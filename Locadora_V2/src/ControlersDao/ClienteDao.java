@@ -13,78 +13,71 @@ public class ClienteDao {
         private static final SimpleDateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
         private static PreparedStatement prepSt;
     
-    public void update(ClienteBean cliente){
-        String query;
-          
-        query = "UPDATE " + TABLE_NAME + 
-                    " SET nome = ?, cpf = ?, rg = ?, data_nascimento = ?, sexo = ?,"
-                    + "cep = ?, logradouro = ?, numero_logradouro = ?, bairro = ?, municipio = ?, uf = ?,"
-                    + " telefone = ?, celular = ?, email = ?, situacao = ? WHERE id= ?";
-        try {
-            ConnectionDao.open();
-            prepSt = ConnectionDao.getPreparedStatement(query);
-            prepSt.setString(1, cliente.getNome());
-            prepSt.setString(2, cliente.getCpf());
-            prepSt.setString(3, cliente.getRg());
-            prepSt.setString(4, SHORT_DATE_FORMAT.format(cliente.getDataNascimento()));
-            prepSt.setInt(5, cliente.getSexo());
-            prepSt.setString(6, cliente.getCep());
-            prepSt.setString(7, cliente.getLogradouro());
-            prepSt.setInt(8, cliente.getNumeroLogradouro());
-            prepSt.setString(9, cliente.getBairro());
-            prepSt.setInt(10, cliente.getMunicipio());
-            prepSt.setString(11, cliente.getUf());
-            prepSt.setString(12, cliente.getNumeroTelefone());
-            prepSt.setString(13, cliente.getNumeroCelular());
-            prepSt.setString(14, cliente.getEmail());
-            prepSt.setInt(15, cliente.getSituacao());
-            prepSt.setInt(16, cliente.getId());
-            System.out.println(prepSt.toString());
-            prepSt.executeUpdate();
-            
-            System.out.println("Alterado com sucesso");
-            ConnectionDao.close(prepSt);
-        
-        }catch(SQLException ex) {
-             System.out.println("ERRO AO Alterar "); 
-        }
-    }    
-    
     public void save(ClienteBean cliente) { 
+        String msg = "";
         try {
             ConnectionDao.open();
             String query;
+            
+            if(cliente.getId() > 0) {
+                query = "UPDATE " + TABLE_NAME + 
+                                " SET nome = ?, cpf = ?, rg = ?, data_nascimento = ?, sexo = ?,"
+                                + "cep = ?, logradouro = ?, numero_logradouro = ?, bairro = ?, municipio = ?, uf = ?,"
+                                + " telefone = ?, celular = ?, email = ?, situacao = ? WHERE id= ?";
+                prepSt = ConnectionDao.getPreparedStatement(query);
+                prepSt.setString(1, cliente.getNome());
+                prepSt.setString(2, cliente.getCpf());
+                prepSt.setString(3, cliente.getRg());
+                prepSt.setString(4, SHORT_DATE_FORMAT.format(cliente.getDataNascimento()));
+                prepSt.setInt(5, cliente.getSexo());
+                prepSt.setString(6, cliente.getCep());
+                prepSt.setString(7, cliente.getLogradouro());
+                prepSt.setInt(8, cliente.getNumeroLogradouro());
+                prepSt.setString(9, cliente.getBairro());
+                prepSt.setInt(10, cliente.getMunicipio());
+                prepSt.setString(11, cliente.getUf());
+                prepSt.setString(12, cliente.getNumeroTelefone());
+                prepSt.setString(13, cliente.getNumeroCelular());
+                prepSt.setString(14, cliente.getEmail());
+                prepSt.setInt(15, cliente.getSituacao());
+                prepSt.setInt(16, cliente.getId());
+                System.out.println(prepSt.toString());
+                msg = "Erro na alteração do registro!";
+                prepSt.executeUpdate();
 
-            query = "INSERT INTO " + TABLE_NAME 
-                    + "(nome, cpf, rg, data_nascimento, sexo,"
-                    + "cep, logradouro, numero_logradouro, bairro, "
-                    + "municipio, uf, telefone, celular,email)" +
-                    " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-           
-            prepSt = ConnectionDao.getPreparedStatement(query);
-            prepSt.setString(1, cliente.getNome());
-            prepSt.setString(2, cliente.getCpf());
-            prepSt.setString(3, cliente.getRg());
-            prepSt.setString(4, SHORT_DATE_FORMAT.format(cliente.getDataNascimento()));
-            prepSt.setInt(5, cliente.getSexo());
-            prepSt.setString(6, cliente.getCep());
-            prepSt.setString(7, cliente.getLogradouro());
-            prepSt.setInt(8, cliente.getNumeroLogradouro());
-            prepSt.setString(9, cliente.getBairro());
-            prepSt.setInt(10, cliente.getMunicipio());
-            prepSt.setString(11, cliente.getUf());
-            prepSt.setString(12, cliente.getNumeroTelefone());
-            prepSt.setString(13, cliente.getNumeroCelular());
-            prepSt.setString(14, cliente.getEmail());
-            
-            System.out.println(prepSt.toString());
-            
-            prepSt.executeUpdate();
-            System.out.println("ADICIONADO");
+                System.out.println("Alterado com sucesso");
+            }            
+            else {
+                query = "INSERT INTO " + TABLE_NAME 
+                        + "(nome, cpf, rg, data_nascimento, sexo,"
+                        + "cep, logradouro, numero_logradouro, bairro, "
+                        + "municipio, uf, telefone, celular,email)" +
+                        " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+                prepSt = ConnectionDao.getPreparedStatement(query);
+                prepSt.setString(1, cliente.getNome());
+                prepSt.setString(2, cliente.getCpf());
+                prepSt.setString(3, cliente.getRg());
+                prepSt.setString(4, SHORT_DATE_FORMAT.format(cliente.getDataNascimento()));
+                prepSt.setInt(5, cliente.getSexo());
+                prepSt.setString(6, cliente.getCep());
+                prepSt.setString(7, cliente.getLogradouro());
+                prepSt.setInt(8, cliente.getNumeroLogradouro());
+                prepSt.setString(9, cliente.getBairro());
+                prepSt.setInt(10, cliente.getMunicipio());
+                prepSt.setString(11, cliente.getUf());
+                prepSt.setString(12, cliente.getNumeroTelefone());
+                prepSt.setString(13, cliente.getNumeroCelular());
+                prepSt.setString(14, cliente.getEmail());
+                msg = "Erro ao salvar o registro!";
+                prepSt.executeUpdate();
+                
+                System.out.println("ADICIONADO");
+                }            
             ConnectionDao.close(prepSt);
 
         } catch(SQLException ex) {
-             System.out.println("ERRO AO ADICIONAR");
+             System.out.println(msg);
 
         }
     }

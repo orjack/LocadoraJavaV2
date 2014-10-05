@@ -18,8 +18,8 @@ public class DiretorDao {
             String query;
             
             if(diretor.getId() > 0) {
-                query = "UPDATE"+ TABLE_NAME
-                        + "SET nome =?, situacao=? WHERE id=?";
+                query = "UPDATE "+ TABLE_NAME
+                        + " SET nome= ?, situacao= ? WHERE id= ?";
                 prepSt = ConnectionDao.getPreparedStatement(query);
                 prepSt.setString(1, diretor.getNome());
                 prepSt.setInt(2, diretor.getSitucacao());
@@ -31,8 +31,7 @@ public class DiretorDao {
                 prepSt.setString(1, diretor.getNome());
             }
             prepSt.executeUpdate();
-            
-            ConnectionDao.close();
+            ConnectionDao.close(prepSt);
             
         } catch(SQLException ex) {
             System.out.println("Erro ao inserir registro no Banco");
@@ -83,8 +82,7 @@ public class DiretorDao {
         return instance;
     }
     
-    public DiretorBean get(int id) {
-        System.out.println(id);
+    public static DiretorBean get(int id) {
         DiretorBean diretor = new DiretorBean();
         try {
             ConnectionDao.open();
@@ -106,7 +104,6 @@ public class DiretorDao {
             ex.printStackTrace();
             System.out.println("Não existe este registro");
         }
-        System.out.println(diretor.getNome().toString());
         return diretor;
     }
 }

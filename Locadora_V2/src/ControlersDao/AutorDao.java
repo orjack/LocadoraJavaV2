@@ -25,14 +25,17 @@ public class AutorDao {
                 prepSt.setString(1, autor.getNome());
                 prepSt.setInt(2, autor.getSituacao());
                 prepSt.setInt(3, autor.getId());
+                prepSt.executeUpdate();
             } else {
                 query = "INSERT INTO "+ TABLE_NAME +" (nome)"
-                    + " VALUES(?)";
+                    + " VALUES(?);"
+                    + "INSERT INTO midias (locacao, midia)"
+                    + " VALUES(?, ?)";
                 prepSt = ConnectionDao.getPreparedStatement(query);
                 prepSt.setString(1, autor.getNome());
+                prepSt.executeUpdate();
             }
             
-            prepSt.executeUpdate();
             ConnectionDao.close(prepSt);
             
         } catch(SQLException ex) {
@@ -50,11 +53,10 @@ public class AutorDao {
             ConnectionDao.prepSt.executeUpdate();
             ConnectionDao.close();
         } catch(SQLException ex) {
-            ex.printStackTrace();
         }
     }
     
-    public static ArrayList<AutorBean> all() {
+    public ArrayList<AutorBean> all() {
         ArrayList<AutorBean> instance = new ArrayList();
         try {
             ConnectionDao.open();
@@ -85,7 +87,6 @@ public class AutorDao {
     }
     
     public static AutorBean get(int id) {
-        System.out.println(id);
         AutorBean autor = new AutorBean();
         try {
             ConnectionDao.open();
@@ -106,7 +107,6 @@ public class AutorDao {
             ex.printStackTrace();
             System.out.println("Não existe este registro");
         }
-        System.out.println(autor.getNome().toString());
         return autor;
     }
 }

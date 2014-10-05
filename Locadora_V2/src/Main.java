@@ -2,7 +2,10 @@
 import Forms.JFrmAutor;
 import Forms.JFrmCliente;
 import Forms.JFrmDiretor;
+import Forms.JFrmFornecedor;
+import Forms.JFrmLocacao;
 import Forms.JFrmMenu;
+import Forms.JFrmMidia;
 import javax.swing.UIManager;
 
 public class Main {
@@ -13,7 +16,7 @@ public class Main {
         }catch(Exception ex){}
         
         //JFrmMenu dialog = new JFrmMenu();
-        JFrmDiretor dialog = new JFrmDiretor();
+        JFrmLocacao dialog = new JFrmLocacao();
         dialog.setVisible(true);
      }
 }

@@ -1,6 +1,6 @@
 package Model;
 
-import java.util.ArrayList;
+import java.util.Date;
 
 public class MidiaBean {
     private int id;
@@ -15,9 +15,9 @@ public class MidiaBean {
     private String produtora;
     private String titulo;
     private int categoria;
-    private String data_lancamento;
-    private double valor_custo;
-    private double valor_locacao;
+    private String dataLancamento;
+    private double valorCusto;
+    private double valorLocacao;
     private int quantidade;
     private String sinopse;
     private int situacao;
@@ -102,28 +102,28 @@ public class MidiaBean {
         this.categoria = categoria;
     }
 
-    public String getData_lancamento() {
-        return data_lancamento;
+    public String getDataLancamento() {
+        return dataLancamento;
     }
 
-    public void setData_lancamento(String data_lancamento) {
-        this.data_lancamento = data_lancamento;
+    public void setDataLancamento(String dataLancamento) {
+        this.dataLancamento = dataLancamento;
     }
 
-    public double getValor_custo() {
-        return valor_custo;
+    public double getValorCusto() {
+        return valorCusto;
     }
 
-    public void setValor_custo(double valor_custo) {
-        this.valor_custo = valor_custo;
+    public void setValorCusto(double valorCusto) {
+        this.valorCusto = valorCusto;
     }
 
-    public double getValor_locacao() {
-        return valor_locacao;
+    public double getValorLocacao() {
+        return valorLocacao;
     }
 
-    public void setValor_locacao(double valor_locacao) {
-        this.valor_locacao = valor_locacao;
+    public void setValorLocacao(double valorLocacao) {
+        this.valorLocacao = valorLocacao;
     }
 
     public int getQuantidade() {
@@ -147,8 +147,11 @@ public class MidiaBean {
     }
 
     public void setSituacao(int situacao) {
-        Integer.valueOf(situacao == 1 ? "Ativo" : "Inativo");
         this.situacao = situacao;
+    }
+    
+    public String getSituacaoDisplay() {
+        return this.situacao == 1 ? "Ativo" : "Inativo";
     }
     
 }

@@ -2,21 +2,21 @@ package Model;
 
 public class FornecedorBean {
     private int id;
-    private String razao_social;
+    private String razaoSocial;
     private String cnpj;
-    private String inscricao_estadual;
+    private String inscricaoEstadual;
     
     //Endereco
     private String cep;
     private String logradouro;
-    private int numero_logradouro;
+    private int numeroLogradouro;
     private String bairro;
-    private String municipio;
-    private int uf;
+    private int municipio;
+    private String uf;
     
     //Contato
-    private String numero_celular;
-    private String numero_residencial;
+    private String numeroCelular;
+    private String numeroTelefone;
     private String Email;
     private int situacao;
 
@@ -39,11 +39,11 @@ public class FornecedorBean {
     public void setLogradouro(String logradouro) {
         this.logradouro = logradouro;
     }
-    public int getNumero_logradouro() {
-        return numero_logradouro;
+    public int getNumeroLogradouro() {
+        return numeroLogradouro;
     }
-    public void setNumero_logradouro(int numero_logradouro) {
-        this.numero_logradouro = numero_logradouro;
+    public void setNumeroLogradouro(int numeroLogradouro) {
+        this.numeroLogradouro = numeroLogradouro;
     }
     public String getBairro() {
         return bairro;
@@ -53,36 +53,36 @@ public class FornecedorBean {
         this.bairro = bairro;
     }
 
-    public String getMunicipio() {
+    public int getMunicipio() {
         return municipio;
     }
 
-    public void setMunicipio(String municipio) {
+    public void setMunicipio(int municipio) {
         this.municipio = municipio;
     }
 
-    public int getUf() {
+    public String getUf() {
         return uf;
     }
 
-    public void setUf(int uf) {
+    public void setUf(String uf) {
         this.uf = uf;
     }
 
-    public String getNumero_celular() {
-        return numero_celular;
+    public String getNumeroCelular() {
+        return numeroCelular;
     }
 
-    public void setNumero_celular(String numero_celular) {
-        this.numero_celular = numero_celular;
+    public void setNumeroCelular(String numeroCelular) {
+        this.numeroCelular = numeroCelular;
     }
 
-    public String getNumero_residencial() {
-        return numero_residencial;
+    public String getNumeroTelefone() {
+        return numeroTelefone;
     }
 
-    public void setNumero_residencial(String numero_residencial) {
-        this.numero_residencial = numero_residencial;
+    public void setNumeroTelefone(String numeroTelefone) {
+        this.numeroTelefone = numeroTelefone;
     }
     
     public String getEmail() {
@@ -92,12 +92,12 @@ public class FornecedorBean {
     public void setEmail(String Email) {
         this.Email = Email;
     }
-    public String getRazao_social() {
-        return razao_social;
+    public String getRazaoSocial() {
+        return razaoSocial;
     }
 
-    public void setRazao_social(String razao_social) {
-        this.razao_social = razao_social;
+    public void setRazaoSocial(String razaoSocial) {
+        this.razaoSocial = razaoSocial;
     }
 
     public String getCnpj() {
@@ -108,12 +108,12 @@ public class FornecedorBean {
         this.cnpj = cnpj;
     }
 
-    public String getInscricao_estadual() {
-        return inscricao_estadual;
+    public String getInscricaoEstadual() {
+        return inscricaoEstadual;
     }
 
-    public void setInscricao_estadual(String inscricao_estadual) {
-        this.inscricao_estadual = inscricao_estadual;
+    public void setInscricaoEstadual(String inscricaoEstadual) {
+        this.inscricaoEstadual = inscricaoEstadual;
     }
 
     public int getSituacao() {
@@ -121,7 +121,10 @@ public class FornecedorBean {
     }
 
     public void setSituacao(int situacao) {
-        Integer.valueOf(situacao == 1 ? "Ativo" : "Inativo");
         this.situacao = situacao;
+    }
+    
+    public String getSituacaoDisplay() {
+        return this.situacao == 1 ? "Ativo" : "Inativo";
     }
 }

@@ -44,6 +44,7 @@ public class JFrmAutor extends javax.swing.JFrame {
         jbtnDelete = new javax.swing.JButton();
         jbtnSave = new javax.swing.JButton();
         jbtnExit = new javax.swing.JButton();
+        jbtClear = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -151,6 +152,13 @@ public class JFrmAutor extends javax.swing.JFrame {
             }
         });
 
+        jbtClear.setText("Limpar");
+        jbtClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtClearActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -159,6 +167,8 @@ public class JFrmAutor extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jbtnExit)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jbtClear)
+                .addGap(27, 27, 27)
                 .addComponent(jbtnSave)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtnDelete)
@@ -172,7 +182,8 @@ public class JFrmAutor extends javax.swing.JFrame {
                     .addComponent(jbtnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jbtnSave, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
-                        .addComponent(jbtnExit, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)))
+                        .addComponent(jbtnExit, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
+                    .addComponent(jbtClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -251,33 +262,31 @@ public class JFrmAutor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDeleteActionPerformed
-        int id = Integer.valueOf(jtxtId.getText());
         selected_index = jtbLista.getSelectedRow();
-        
-        if (selected_index != -1) {
-            if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o autor?", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                list.remove(selected_index);
-
-                try {
-                    AutorBean autor = new AutorBean();
-                    autor.setId(id);
+        if(!jtxtId.getText().isEmpty()) {
+            if (selected_index != -1) {
+                if (JOptionPane.showConfirmDialog(this, "Deseja realmente excluir o autor?", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    list.remove(selected_index);
+                    
+                    autor = new AutorBean();
+                    autor.setId(Integer.valueOf(jtxtId.getText()));
                     AutorDao.delete(autor);
                     loadTable();
                     clear();
-                    
                     JOptionPane.showMessageDialog(null, "Registro excluido com sucesso!");
-                    
-                } catch (HeadlessException ex) {
+                }
+                else {
                     JOptionPane.showMessageDialog(null, "Erro ao excluir este registro!");
                 }
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um cliente");
         }
     }//GEN-LAST:event_jbtnDeleteActionPerformed
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
         autor.setNome(jtxtNome.getText());
         autor.setSituacao(jcbSituacao.isSelected() == true ? 1 : 2);
-        
         dao.save(autor);
         
         loadTable();
@@ -320,6 +329,10 @@ public class JFrmAutor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jmAlterarActionPerformed
 
+    private void jbtClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtClearActionPerformed
+        clear();
+    }//GEN-LAST:event_jbtClearActionPerformed
+
 //<editor-fold defaultstate="collapsed" desc="Componentes">
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -330,6 +343,7 @@ public class JFrmAutor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbtClear;
     private javax.swing.JButton jbtnDelete;
     private javax.swing.JButton jbtnExit;
     private javax.swing.JButton jbtnSave;
@@ -345,9 +359,8 @@ public class JFrmAutor extends javax.swing.JFrame {
     private void clear(){
         jtxtId.setText(null);
         jtxtId.setEnabled(false);
-        
+        jcbSituacao.setVisible(false);
         jtxtNome.setText(null);
-        is_update = false;
         selected_index = -1;
         autor = new AutorBean();
     }
@@ -357,7 +370,7 @@ public class JFrmAutor extends javax.swing.JFrame {
         Object grade[][] = null;
         model = new DefaultTableModel(grade, titulo);
         jtbLista.setModel(model);
-        this.list = AutorDao.all();
+        this.list = dao.all();
 
         for(AutorBean _autor: list){
             Object campos[] = {String.format("%05d", _autor.getId()), _autor.getNome()};

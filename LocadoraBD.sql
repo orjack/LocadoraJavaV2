@@ -82,15 +82,14 @@ CONSTRAINT `FK_AUTOR` FOREIGN KEY ( `autor` ) REFERENCES `Autor` ( `id` )
 
 CREATE TABLE IF NOT EXISTS `Locacao` (
 	`id`              INT          	NOT NULL AUTO_INCREMENT,
-	`cliente`         INT          	NOT NULL,
+	`id_cliente`      INT          	NOT NULL,
 	`valor_pago`      DECIMAL(10,2) NULL,
-	`data_locacao`    DATETIME() 	NOT NULL,
-	`data_devolucao`  DATETIME() 	NULL,
+	`data_locacao`    VARCHAR(10)	NOT NULL,
+	`data_devolucao`  DATE 			NULL,
 	`situacao`        INT          	NOT NULL DEFAULT 1,
 
 PRIMARY KEY (id),
-CONSTRAINT `FK_CLIENTE` FOREIGN KEY ( `cliente` ) REFERENCES `Cliente` ( `id` ) ,
-CONSTRAINT `FK_MEDIAS_CLIENTE` FOREIGN KEY ( `medias` ) REFERENCES `Medias` ( `id` ) 
+CONSTRAINT `FK_CLIENTE` FOREIGN KEY ( `id_cliente` ) REFERENCES `Cliente` ( `id` )
  ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `MediaLocacao` (
