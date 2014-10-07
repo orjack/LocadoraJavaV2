@@ -4,13 +4,18 @@ import ControlersDao.ClienteDao;
 import ControlersDao.LocacaoDao;
 import ControlersDao.MediaDao;
 import Model.*;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class JFrmLocacao extends javax.swing.JFrame {
+    private static final DateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+    
     ClienteDao clienteDao;
     LocacaoBean locacao;
     float total = 0;
@@ -19,11 +24,13 @@ public class JFrmLocacao extends javax.swing.JFrame {
     ArrayList<ClienteBean> clientes;
     DefaultTableModel model;
     MidiaBean midia;
+    
     public JFrmLocacao() {
         initComponents();
         setLocationRelativeTo(null);
         model = new DefaultTableModel(grade, titulo);
         clienteDao = new ClienteDao();
+        locacao = new LocacaoBean();
     }
 
     @SuppressWarnings("unchecked")
@@ -35,15 +42,15 @@ public class JFrmLocacao extends javax.swing.JFrame {
         jcbxMidia = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jtxtId = new javax.swing.JTextField();
+        jtxtClienteId = new javax.swing.JTextField();
         jbtnSearchCliente = new javax.swing.JButton();
         jbtnAdd = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtbLocacao = new javax.swing.JTable();
-        jtxtValor_total = new javax.swing.JTextField();
+        jtxtValorTotal = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jftData_locacao = new javax.swing.JFormattedTextField();
+        jftDataLocacao = new javax.swing.JFormattedTextField();
         jPanel3 = new javax.swing.JPanel();
         jbtnExit = new javax.swing.JButton();
         jbtnSave = new javax.swing.JButton();
@@ -70,10 +77,10 @@ public class JFrmLocacao extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Cliente:");
 
-        jtxtId.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jtxtId.addMouseListener(new java.awt.event.MouseAdapter() {
+        jtxtClienteId.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jtxtClienteId.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jtxtIdMouseClicked(evt);
+                jtxtClienteIdMouseClicked(evt);
             }
         });
 
@@ -95,7 +102,7 @@ public class JFrmLocacao extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(10, 10, 10)
-                        .addComponent(jtxtId))
+                        .addComponent(jtxtClienteId))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
@@ -110,7 +117,7 @@ public class JFrmLocacao extends javax.swing.JFrame {
                 .addGap(9, 9, 9)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jtxtId, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtxtClienteId, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbtnSearchCliente))
                 .addGap(13, 13, 13)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -163,20 +170,20 @@ public class JFrmLocacao extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jtbLocacao);
 
-        jtxtValor_total.setEditable(false);
-        jtxtValor_total.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jtxtValor_total.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jtxtValorTotal.setEditable(false);
+        jtxtValorTotal.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jtxtValorTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
         jLabel3.setText("TOTAL:");
 
-        jftData_locacao.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jftDataLocacao.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         try {
-            jftData_locacao.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+            jftDataLocacao.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        jftData_locacao.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jftData_locacao.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jftDataLocacao.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jftDataLocacao.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         jbtnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Media/Icons/exit-26.png"))); // NOI18N
         jbtnExit.setText("Exit");
@@ -225,11 +232,11 @@ public class JFrmLocacao extends javax.swing.JFrame {
                         .addGap(8, 8, 8)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jftData_locacao, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jftDataLocacao, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jtxtValor_total, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jtxtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -243,8 +250,8 @@ public class JFrmLocacao extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jftData_locacao, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtxtValor_total, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jftDataLocacao, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtxtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -260,29 +267,36 @@ public class JFrmLocacao extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         String data = (new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));
-        jftData_locacao.setText(data);
-        jftData_locacao.setEditable(false);
+        jftDataLocacao.setText(data);
+        jftDataLocacao.setEditable(false);
         
         
     }//GEN-LAST:event_formWindowOpened
 
+    private int getIdFromComboBox(String value) {
+        StringTokenizer st = new StringTokenizer(value, " - ");
+        return Integer.valueOf(st.nextToken());
+    }
+    
     private void jbtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddActionPerformed
-    try{
         MediaDao midiaDao = new MediaDao();
-        midia = midiaDao.get(jcbxMidia.getSelectedIndex() + 1);
+        int media_id = getIdFromComboBox((String)jcbxMidia.getSelectedItem());
+        midia = midiaDao.get(media_id);
+        locacao.addMidia(midia);
+
         Object campos[] = {
             midia.getId(),
             midia.getTitulo(),
             midia.getValorLocacao(),
             midia.getGrupo()
         };
+
         model.addRow(campos);
+
         jtbLocacao.setModel(model);
+
         total += Double.valueOf(midia.getValorLocacao());
-        jtxtValor_total.setText(String.valueOf(total));
-            
-        } catch (Exception ex){
-        }    
+        jtxtValorTotal.setText(String.valueOf(total));
     }//GEN-LAST:event_jbtnAddActionPerformed
 
     private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
@@ -291,33 +305,30 @@ public class JFrmLocacao extends javax.swing.JFrame {
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
         LocacaoDao dao = new LocacaoDao();
-        locacao = new LocacaoBean();        
-        ClienteBean cliente = new ClienteBean();
-        cliente.setId(Integer.valueOf(jtxtId.getText()));
-        locacao.setCliente(cliente);
-        locacao.setValor_pago(total);
-        locacao.setData_locacao(jftData_locacao.getText().toString());
-        
-        for (int i = 0; i < jtbLocacao.getRowCount(); i++) {
-            locacao.addMidia(midia);
-            System.out.println("MMMMM" + midia.getId());
-        }
+        try {
+        locacao.setDataLocacao(SHORT_DATE_FORMAT.parse(jftDataLocacao.getText().toString()));
+
         dao.save(locacao);
+        clear();
+        } catch (ParseException ex) {}
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
     private void jbtnSearchClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSearchClienteActionPerformed
+        ClienteBean cliente = clienteDao.get(Integer.valueOf(jtxtClienteId.getText()));
+        cliente.setId(Integer.valueOf(jtxtClienteId.getText()));
+        locacao.setCliente(cliente);
         
-        clienteDao.get(Integer.valueOf(jtxtId.getText()));
-        MediaDao midiaDao = new MediaDao();    
+        MediaDao midiaDao = new MediaDao();
         ArrayList<MidiaBean> midias = midiaDao.all();
-            for (MidiaBean m : midias) {
-                jcbxMidia.addItem(m.getId() + " - " + m.getTitulo());
-            }
+
+        for (MidiaBean m : midias) {
+            jcbxMidia.addItem(m.getId() + " - " + m.getTitulo());
+        }
     }//GEN-LAST:event_jbtnSearchClienteActionPerformed
 
-    private void jtxtIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtxtIdMouseClicked
-        jtxtId.setText(null);
-    }//GEN-LAST:event_jtxtIdMouseClicked
+    private void jtxtClienteIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtxtClienteIdMouseClicked
+        jtxtClienteId.setText(null);
+    }//GEN-LAST:event_jtxtClienteIdMouseClicked
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if(JOptionPane.showConfirmDialog(null, "Deseja sair",null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
@@ -339,10 +350,21 @@ public class JFrmLocacao extends javax.swing.JFrame {
     private javax.swing.JButton jbtnSave;
     private javax.swing.JButton jbtnSearchCliente;
     private javax.swing.JComboBox jcbxMidia;
-    private javax.swing.JFormattedTextField jftData_locacao;
+    private javax.swing.JFormattedTextField jftDataLocacao;
     private javax.swing.JTable jtbLocacao;
-    private javax.swing.JTextField jtxtId;
-    private javax.swing.JTextField jtxtValor_total;
+    private javax.swing.JTextField jtxtClienteId;
+    private javax.swing.JTextField jtxtValorTotal;
     // End of variables declaration//GEN-END:variables
+
+    private void clear() {
+        jtxtClienteId.setText(null);
+        jcbxMidia.removeAllItems();
+        jcbxMidia.setEnabled(false);
+        jtxtValorTotal.setText(null);
+        locacao = new LocacaoBean();
+        model = new DefaultTableModel(grade, titulo);
+        jtbLocacao.setModel(model);
+        jtbLocacao.removeAll();
+    }
 }
 

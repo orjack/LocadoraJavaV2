@@ -11,7 +11,7 @@
         <MenuItem class="javax.swing.JMenuItem" name="jmAlterar">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Media/Icons/available_updates-26.png"/>
+              <Image iconType="3" name="/Media/Icons/mini/glyphicons_150_edit.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Alterar"/>
           </Properties>
@@ -195,6 +195,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="jbtLimpar">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Media/Icons/mini/glyphicons_016_bin.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Limpar"/>
           </Properties>
           <Events>

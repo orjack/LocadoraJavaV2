@@ -8,24 +8,19 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class JFrmAutor extends javax.swing.JFrame {
-    //Instancia da DAO de Autor
+    
     AutorDao dao;
-    //Instancia da classe AutorBean
     AutorBean autor;
-    //List de autores
     ArrayList<AutorBean> list;
     
     DefaultTableModel model;
     int selected_index = -1;
-    boolean is_update = false;
-    
+
     public JFrmAutor() {
         initComponents();
-        jcbSituacao.setVisible(false);
         setLocationRelativeTo(null);
         dao = new AutorDao();
         autor = new AutorBean();
-        autor.setSituacao(1);
     }
 
     @SuppressWarnings("unchecked")
@@ -49,16 +44,6 @@ public class JFrmAutor extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtbLista = new javax.swing.JTable();
-
-        jpmMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-                jpmMenuAncestorMoved(evt);
-            }
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
 
         jmAlterar.setText("Alterar");
         jmAlterar.addActionListener(new java.awt.event.ActionListener() {
@@ -113,14 +98,14 @@ public class JFrmAutor extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jtxtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jtxtId, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jtxtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtxtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcbSituacao))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -225,11 +210,6 @@ public class JFrmAutor extends javax.swing.JFrame {
         ));
         jtbLista.setComponentPopupMenu(jpmMenu);
         jtbLista.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jtbLista.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jtbListaMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(jtbLista);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -255,7 +235,7 @@ public class JFrmAutor extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         pack();
@@ -276,6 +256,7 @@ public class JFrmAutor extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Registro excluido com sucesso!");
                 }
                 else {
+                    clear();
                     JOptionPane.showMessageDialog(null, "Erro ao excluir este registro!");
                 }
             }
@@ -293,16 +274,15 @@ public class JFrmAutor extends javax.swing.JFrame {
         clear();
     }//GEN-LAST:event_jbtnSaveActionPerformed
          
-    private void jtbListaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbListaMouseClicked
-        
-    }//GEN-LAST:event_jtbListaMouseClicked
-
     private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
         dispose();
     }//GEN-LAST:event_jbtnExitActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         jtxtId.setEnabled(false);
+        autor.setSituacao(1);
+        jcbSituacao.setVisible(false);
+        jbtnDelete.setEnabled(false);
         loadTable();
     }//GEN-LAST:event_formWindowOpened
 
@@ -312,20 +292,16 @@ public class JFrmAutor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void jpmMenuAncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jpmMenuAncestorMoved
-    }//GEN-LAST:event_jpmMenuAncestorMoved
-
     private void jmAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmAlterarActionPerformed
         selected_index = jtbLista.getSelectedRow();
         
         if(selected_index != -1) {
             autor = list.get(selected_index);
-
             jtxtId.setText(String.valueOf(autor.getId()));
             jtxtNome.setText(autor.getNome());
             jcbSituacao.setVisible(true);
             jcbSituacao.setSelected(autor.getSituacao() == 1);
-
+            jbtnDelete.setEnabled(true);
         }
     }//GEN-LAST:event_jmAlterarActionPerformed
 
@@ -360,6 +336,7 @@ public class JFrmAutor extends javax.swing.JFrame {
         jtxtId.setText(null);
         jtxtId.setEnabled(false);
         jcbSituacao.setVisible(false);
+        jbtnDelete.setEnabled(false);
         jtxtNome.setText(null);
         selected_index = -1;
         autor = new AutorBean();

@@ -11,14 +11,12 @@ import java.util.ArrayList;
 public class ClienteDao {
         private static final String TABLE_NAME = "Cliente";
         private static final SimpleDateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-        private static PreparedStatement prepSt;
     
     public void save(ClienteBean cliente) { 
-        String msg = "";
+        PreparedStatement prepSt = null;
         try {
-            ConnectionDao.open();
             String query;
-            
+
             if(cliente.getId() > 0) {
                 query = "UPDATE " + TABLE_NAME + 
                                 " SET nome = ?, cpf = ?, rg = ?, data_nascimento = ?, sexo = ?,"
@@ -41,11 +39,8 @@ public class ClienteDao {
                 prepSt.setString(14, cliente.getEmail());
                 prepSt.setInt(15, cliente.getSituacao());
                 prepSt.setInt(16, cliente.getId());
-                System.out.println(prepSt.toString());
-                msg = "Erro na alteração do registro!";
                 prepSt.executeUpdate();
-
-                System.out.println("Alterado com sucesso");
+                System.out.println("Alterado com sucesso!");
             }            
             else {
                 query = "INSERT INTO " + TABLE_NAME 
@@ -53,7 +48,6 @@ public class ClienteDao {
                         + "cep, logradouro, numero_logradouro, bairro, "
                         + "municipio, uf, telefone, celular,email)" +
                         " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
                 prepSt = ConnectionDao.getPreparedStatement(query);
                 prepSt.setString(1, cliente.getNome());
                 prepSt.setString(2, cliente.getCpf());
@@ -69,38 +63,40 @@ public class ClienteDao {
                 prepSt.setString(12, cliente.getNumeroTelefone());
                 prepSt.setString(13, cliente.getNumeroCelular());
                 prepSt.setString(14, cliente.getEmail());
-                msg = "Erro ao salvar o registro!";
                 prepSt.executeUpdate();
-                
-                System.out.println("ADICIONADO");
+                System.out.println("Salvo com sucesso!");
                 }            
-            ConnectionDao.close(prepSt);
-
+    
         } catch(SQLException ex) {
-             System.out.println(msg);
-
+             System.out.println("Erro no arquivo cliente");
+        } finally {
+            ConnectionDao.close(prepSt);
         }
     }
     
     public void delete(ClienteBean cliente) {
-        ConnectionDao.open();
+        PreparedStatement prepSt = null;
         String query = "DELETE FROM "+ TABLE_NAME +" WHERE id = ?";
         try {
-            PreparedStatement prepSt = ConnectionDao.getPreparedStatement(query);
+            prepSt = ConnectionDao.getPreparedStatement(query);
             prepSt.setInt(1, cliente.getId());
+            
             prepSt.executeUpdate();
             System.out.println("Removido com sucesso!");
         } catch(SQLException ex) {
             System.out.println("ERRO AO DELETAR");
+        } finally {
+            ConnectionDao.close(prepSt);
         }
     }
     
     public ArrayList<ClienteBean> all() {
         ArrayList<ClienteBean> clientes = new ArrayList();
+        PreparedStatement prepSt = null;
         String query = "SELECT * FROM " + TABLE_NAME;
         try {
             
-            PreparedStatement prepSt = ConnectionDao.getPreparedStatement(query);
+            prepSt = ConnectionDao.getPreparedStatement(query);
             ResultSet rs = prepSt.executeQuery();
             
             while(rs.next()) {
@@ -123,11 +119,13 @@ public class ClienteDao {
                 cliente.setSituacao(rs.getInt("situacao"));                
                 clientes.add(cliente);
             }
-        
+    
         } catch(SQLException ex) {
             System.out.println("Erro ao listar os clientes");
         } catch(ParseException ex) {
             System.out.println("Erro na data");
+        } finally {
+            ConnectionDao.close(prepSt);
         }
         
         return clientes;
@@ -136,10 +134,11 @@ public class ClienteDao {
     
     public ClienteBean get(int id) {
         ClienteBean cliente = new ClienteBean();
-        String query = "SELECT * FROM " + TABLE_NAME + "WHERE id = " + id;
-        System.out.println(id);
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE id = ? ;";
+        PreparedStatement prepSt = null;
         try {
-            PreparedStatement prepSt = ConnectionDao.getPreparedStatement(query);
+            prepSt = ConnectionDao.getPreparedStatement(query);
+            prepSt.setInt(1, id);
             ResultSet rs = prepSt.executeQuery();
             
             if(rs.next()) {
@@ -151,7 +150,7 @@ public class ClienteDao {
                 cliente.setSexo(rs.getInt("sexo"));
                 cliente.setCep(rs.getString("cep"));
                 cliente.setLogradouro(rs.getString("logradouro"));
-                cliente.setNumeroLogradouro(rs.getInt("numeroLogradouro"));
+                cliente.setNumeroLogradouro(rs.getInt("numero_logradouro"));
                 cliente.setBairro(rs.getString("bairro"));
                 cliente.setMunicipio(rs.getInt("municipio"));
                 cliente.setUf(rs.getString("uf"));
@@ -160,10 +159,15 @@ public class ClienteDao {
                 cliente.setEmail(rs.getString("email"));
                 cliente.setSituacao(rs.getInt("situacao"));               
             }
-        }catch (SQLException ex) {
 
-        }catch (ParseException ex) {}
-           
+        }catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.out.println("Error import cliente");
+        }catch (ParseException ex) {
+            System.out.println("Error data invalid");
+        } finally {
+            ConnectionDao.close(prepSt);
+        }
         return cliente;
     }
 }

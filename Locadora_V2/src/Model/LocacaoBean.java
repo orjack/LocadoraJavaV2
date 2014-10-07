@@ -1,15 +1,16 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class LocacaoBean {
     
     private int id;
     private ClienteBean cliente;
     private ArrayList<MidiaBean> midias;
-    private double valor_pago;
-    private String data_locacao;
-    private String data_devolucao;
+    private double valorPago;
+    private Date dataLocacao;
+    private Date dataDevolucao;
     private int situacao;
     
     public static int SITUACAO_ABERTO = 1;
@@ -31,31 +32,15 @@ public class LocacaoBean {
     }
 
     public void addMidia(MidiaBean midia) {
-        this.midias.add(midia);
+        this.getMidias().add(midia);
     }
-    
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getData_locacao() {
-        return data_locacao;
-    }
-
-    public void setData_locacao(String data_locacao) {
-        this.data_locacao = data_locacao;
-    }
-
-    public String getData_devolucao() {
-        return data_devolucao;
-    }
-
-    public void setData_devolucao(String data_devolucao) {
-        this.data_devolucao = data_devolucao;
     }
 
     public ClienteBean getCliente() {
@@ -74,12 +59,28 @@ public class LocacaoBean {
         this.midias = midias;
     }
 
-    public double getValor_pago() {
-        return valor_pago;
+    public double getValorPago() {
+        return valorPago;
     }
 
-    public void setValor_pago(double valor_pago) {
-        this.valor_pago = valor_pago;
+    public void setValorPago(double valorPago) {
+        this.valorPago = valorPago;
+    }
+
+    public Date getDataLocacao() {
+        return dataLocacao;
+    }
+
+    public void setDataLocacao(Date dataLocacao) {
+        this.dataLocacao = dataLocacao;
+    }
+
+    public Date getDataDevolucao() {
+        return dataDevolucao;
+    }
+
+    public void setDataDevolucao(Date dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
     }
 
     public int getSituacao() {

@@ -15,7 +15,7 @@ public class MidiaBean {
     private String produtora;
     private String titulo;
     private int categoria;
-    private String dataLancamento;
+    private int anoLancamento;
     private double valorCusto;
     private double valorLocacao;
     private int quantidade;
@@ -102,12 +102,12 @@ public class MidiaBean {
         this.categoria = categoria;
     }
 
-    public String getDataLancamento() {
-        return dataLancamento;
+    public int getAnoLancamento() {
+        return anoLancamento;
     }
 
-    public void setDataLancamento(String dataLancamento) {
-        this.dataLancamento = dataLancamento;
+    public void setAnoLancamento(int anoLancamento) {
+        this.anoLancamento = anoLancamento;
     }
 
     public double getValorCusto() {

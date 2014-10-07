@@ -1,7 +1,11 @@
 package Forms;
 
+import ControlersDao.ClienteDao;
+import ControlersDao.LocacaoDao;
 import Model.*;
 import com.sun.org.apache.bcel.internal.generic.AALOAD;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,15 +15,18 @@ import javax.swing.table.DefaultTableModel;
 
 public class JFrmDevolucao extends javax.swing.JFrame {
     ArrayList<LocacaoBean> list_locacao;
-
+    ClienteDao clienteDao;
+    
+    private static final DateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     private static final String EMPTY_OPTION = "---------";
     DefaultTableModel model;
-
+    LocacaoDao dao;
+    LocacaoBean locacao;
     public JFrmDevolucao() {
         initComponents();
         setLocationRelativeTo(null);
-        
-        
+        dao = new LocacaoDao();
+        clienteDao = new ClienteDao();
     }
 
     @SuppressWarnings("unchecked")
@@ -117,7 +124,7 @@ public class JFrmDevolucao extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
+                .addContainerGap(17, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jtxtId, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -148,6 +155,7 @@ public class JFrmDevolucao extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("TOTAL:");
 
+        jtxtTotal.setEditable(false);
         jtxtTotal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         jtxtPago.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -251,21 +259,107 @@ public class JFrmDevolucao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSearchActionPerformed
-
         
+        if(!jtxtId.getText().isEmpty()) {
+            int cliente_id = Integer.valueOf(jtxtId.getText());
+            jtxtId.setText(String.valueOf(cliente_id));
+            
+            jcbxLocacao.removeAllItems();
+            jcbxLocacao.addItem(EMPTY_OPTION);
+            jcbxLocacao.setSelectedIndex(0);
+            jcbxLocacao.setEnabled(false);
+            
+            ClienteBean cliente = clienteDao.get(cliente_id);
+
+            ArrayList<LocacaoBean> locacoes = dao.filter(cliente.getId(), LocacaoBean.SITUACAO_ABERTO);
+            if (locacoes.size() > 0) {
+                jcbxLocacao.setEnabled(true);
+                for(LocacaoBean _locacao: locacoes){
+                    if(_locacao.getCliente().getId() == cliente.getId() && _locacao.getSituacao() == LocacaoBean.SITUACAO_ABERTO){
+                        jcbxLocacao.addItem(_locacao.getId()+" - "+String.valueOf(SHORT_DATE_FORMAT.format(_locacao.getDataLocacao())));
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Cliente" + cliente.getNome() + " não possuí locações");
+                    }
+                }
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Digite o código do cliente!");
+        }
     }//GEN-LAST:event_jbtnSearchActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-
+        jftxtData_devolucao.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()))); 
+        jftxtData_devolucao.setEditable(false);
+        
+        Object titulo[] = {"Título", "Data Locação", "Valor"};
+        Object grade[][] = null;
+        
+        model = new DefaultTableModel(grade, titulo);
+        jtbDevolucao.setModel(model);
         
     }//GEN-LAST:event_formWindowOpened
 
     private void jcbxLocacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbxLocacaoActionPerformed
-       
+        if (jcbxLocacao.getSelectedIndex() != -1 ){
+            Object titulo[] = {"Título","Data Locação", "Valor"};
+            Object grade[][] = null;
+
+            model = new DefaultTableModel(grade, titulo);
+            jtbDevolucao.setModel(model);
+
+            String value = (String)jcbxLocacao.getSelectedItem();
+
+            Double total = new Double(0);
+
+            if (!value.equals(EMPTY_OPTION) && !jtxtId.getText().isEmpty()) {            
+                StringTokenizer st = new StringTokenizer(value, " - ");
+                int locacao_id = Integer.valueOf(st.nextToken());
+
+                locacao = dao.get(locacao_id);
+                for (MidiaBean midia : locacao.getMidias()) {
+                    total += Double.valueOf(midia.getValorLocacao());
+                    Object campo[]  = {
+                        midia.getTitulo(),
+                        String.valueOf(SHORT_DATE_FORMAT.format(locacao.getDataLocacao())),
+                        midia.getValorLocacao(), 
+                    };
+                    model.addRow(campo);
+                }
+                jtxtTotal.setText(String.valueOf(total));
+            }
+        }
     }//GEN-LAST:event_jcbxLocacaoActionPerformed
 
+    private void clear() {
+        jtxtId.setText(null);
+        jtxtPago.setText(null);
+        jtxtTotal.setText(null);
+        
+        jcbxLocacao.setSelectedItem(EMPTY_OPTION);
+        jcbxLocacao.setEnabled(false);
+        
+        Object titulo[] = {"Título","Total","Valor", "Data Locação"};
+        Object grade[][] = null;
+        
+        model = new DefaultTableModel(grade, titulo);
+        jtbDevolucao.setModel(model);
+        locacao = null;
+    }
+    
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
-       
+      String value = (String)jcbxLocacao.getSelectedItem();
+      try {  
+        if (!value.equals(EMPTY_OPTION)) {
+            locacao.setValorPago(Double.valueOf(jtxtPago.getText()));
+            locacao.setDataDevolucao(SHORT_DATE_FORMAT.parse(jftxtData_devolucao.getText()));
+            locacao.setSituacao(LocacaoBean.SITUACAO_DEVOLVIDO);
+            dao.save(locacao);
+            clear();
+            JOptionPane.showMessageDialog(this, "Efetuada Devolução");
+        } 
+      } catch (ParseException ex) {}
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
     private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed

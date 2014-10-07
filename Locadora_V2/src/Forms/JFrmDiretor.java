@@ -10,11 +10,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class JFrmDiretor extends javax.swing.JFrame {
-    //Instancia da DAO de Diretor
     DiretorDao dao;
-    //Instancia da classe DiretorBean
     DiretorBean diretor;
-    //List de diretores
     ArrayList<DiretorBean> list;
     
     DefaultTableModel model;
@@ -49,7 +46,7 @@ public class JFrmDiretor extends javax.swing.JFrame {
         jtxtNome = new javax.swing.JTextField();
         jcbSituacao = new javax.swing.JCheckBox();
 
-        jmAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Media/Icons/available_updates-26.png"))); // NOI18N
+        jmAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Media/Icons/mini/glyphicons_150_edit.png"))); // NOI18N
         jmAlterar.setText("Alterar");
         jmAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -114,6 +111,7 @@ public class JFrmDiretor extends javax.swing.JFrame {
             }
         });
 
+        jbtLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Media/Icons/mini/glyphicons_016_bin.png"))); // NOI18N
         jbtLimpar.setText("Limpar");
         jbtLimpar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -259,6 +257,7 @@ public class JFrmDiretor extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Registro excluido com sucesso!");
                 }
                 else {
+                    clear();
                     JOptionPane.showMessageDialog(null, "Erro ao excluir este registro!");
                 }
             }
@@ -283,6 +282,7 @@ public class JFrmDiretor extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         jcbSituacao.setVisible(false);
         jtxtId.setEnabled(false);
+        jbtnDelete.setEnabled(false);
         loadTable();
     }//GEN-LAST:event_formWindowOpened
 
@@ -301,6 +301,7 @@ public class JFrmDiretor extends javax.swing.JFrame {
             jtxtNome.setText(diretor.getNome());
             jcbSituacao.setVisible(true);
             jcbSituacao.setSelected(diretor.getSitucacao() == 1);
+            jbtnDelete.setEnabled(true);
         }
     }//GEN-LAST:event_jmAlterarActionPerformed
 
@@ -344,6 +345,7 @@ public class JFrmDiretor extends javax.swing.JFrame {
     private void clear(){
         jtxtId.setText(null);
         jtxtNome.setText(null);
+        jbtnDelete.setEnabled(false);
         jcbSituacao.setVisible(false);
         selected_index = -1;
         diretor = new DiretorBean();

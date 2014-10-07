@@ -16,7 +16,7 @@ public class JFrmCliente extends javax.swing.JFrame {
     ArrayList<ClienteBean> list;
     DefaultTableModel model;
     
-    int selected_index = -1;
+    int selected_index;
     
     private static final DateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     
@@ -596,6 +596,7 @@ public class JFrmCliente extends javax.swing.JFrame {
             dao.save(cliente);
             loadTable();
             clear();
+            JOptionPane.showMessageDialog(null, "Salvo com sucesso!");
         } catch (ParseException ex) {
             System.out.println("FAIL TO CONVERT DATE");
         }
@@ -627,13 +628,12 @@ public class JFrmCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnDeleteActionPerformed
 
     private void jbtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEditActionPerformed
-        int id = (Integer)model.getValueAt(jtbCliente.getSelectedRow(), 0);
         jcbSituacao.setVisible(true);
         selected_index = jtbCliente.getSelectedRow();
+        
         if (selected_index != -1) {
             cliente = list.get(selected_index);
-            dao.get(cliente.getId());
-            jtxtId.setText(String.valueOf(id));
+            jtxtId.setText(String.valueOf(cliente.getId()));
             jftxCpf.setText(cliente.getCpf());
             jftxRg.setText(cliente.getRg());
             jtxtNome.setText(cliente.getNome());
@@ -649,13 +649,13 @@ public class JFrmCliente extends javax.swing.JFrame {
             jftxCelular.setText(cliente.getNumeroCelular());
             jtxtEmail.setText(cliente.getEmail());
             jcbSituacao.setSelected((cliente.getSituacao() == 1));
-            
+
             jTPanel.setEnabledAt(1, true);
             jTPanel.setSelectedComponent(jPanel2);
             jbtnSave.setEnabled(true);
         }
         else
-         JOptionPane.showMessageDialog(null, "Selecione um cliente");   
+            JOptionPane.showMessageDialog(null, "Selecione um cliente");   
     }//GEN-LAST:event_jbtnEditActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -746,8 +746,8 @@ public class JFrmCliente extends javax.swing.JFrame {
         jtxtLogradouro.setText(null);
         jtxtNumeroLogradouro.setText(null);
         jtxtBairro.setText(null);
-        jcbxMunicipio.setSelectedItem(null);
-        jcbxUf.setSelectedItem(null);
+        jcbxMunicipio.getSelectedIndex();
+        jcbxUf.getSelectedIndex();
         jftxTelefone.setText(null);
         jftxCelular.setText(null);
         jtxtEmail.setText(null);

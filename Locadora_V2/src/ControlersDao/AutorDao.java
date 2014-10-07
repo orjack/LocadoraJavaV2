@@ -12,59 +12,65 @@ public class AutorDao {
     private static final String TABLE_NAME = "Autor";
     
     public void save(AutorBean autor) {
+        PreparedStatement prepSt = null;
         try {
-            ConnectionDao.open();
-            
-            PreparedStatement prepSt;
             String query;
-            
+
             if (autor.getId() > 0) {
                 query = "UPDATE "+ TABLE_NAME
                     + " SET nome= ?, situacao= ? WHERE id= ?";
                 prepSt = ConnectionDao.getPreparedStatement(query);
+
                 prepSt.setString(1, autor.getNome());
                 prepSt.setInt(2, autor.getSituacao());
                 prepSt.setInt(3, autor.getId());
                 prepSt.executeUpdate();
+                System.out.println("Alterado com sucesso!");
             } else {
                 query = "INSERT INTO "+ TABLE_NAME +" (nome)"
-                    + " VALUES(?);"
-                    + "INSERT INTO midias (locacao, midia)"
-                    + " VALUES(?, ?)";
+                    + " VALUES(?);";
                 prepSt = ConnectionDao.getPreparedStatement(query);
+
                 prepSt.setString(1, autor.getNome());
                 prepSt.executeUpdate();
+                System.out.println("Salvo com sucesso!");
             }
-            
-            ConnectionDao.close(prepSt);
-            
         } catch(SQLException ex) {
             System.out.println("Erro ao inserir registro no Banco");
+        } finally {
+            ConnectionDao.close(prepSt);
         }
-        
     }
     
     public static void delete(AutorBean autor) {
         ConnectionDao.open();
         String query = "DELETE FROM "+ TABLE_NAME +" WHERE id = ?";
+        PreparedStatement prepSt = null;
+        
         try {
-            ConnectionDao.prepSt = ConnectionDao.con.prepareStatement(query);
-            ConnectionDao.prepSt.setInt(1, autor.getId());
-            ConnectionDao.prepSt.executeUpdate();
-            ConnectionDao.close();
+            prepSt = ConnectionDao.getPreparedStatement(query);
+            
+            prepSt.setInt(1, autor.getId());
+            prepSt.executeUpdate();
+            System.out.println("Removido com sucesso!");
+         
         } catch(SQLException ex) {
+            System.out.println("Erro ao remover registro!");
+        } finally {
+            ConnectionDao.close(prepSt);
         }
     }
     
     public ArrayList<AutorBean> all() {
         ArrayList<AutorBean> instance = new ArrayList();
+        PreparedStatement prepSt = null;
         try {
             ConnectionDao.open();
             String query = "SELECT * FROM " + TABLE_NAME;
-            ConnectionDao.prepSt = ConnectionDao.con.prepareCall(query);
 
-            ResultSet rs = ConnectionDao.prepSt.executeQuery();
-            
+            prepSt = ConnectionDao.getPreparedStatement(query);
+            ResultSet rs = prepSt.executeQuery();
+
             while(rs.next()) {
                 AutorBean autor = new AutorBean();
                 autor.setId(rs.getInt("id"));
@@ -73,39 +79,36 @@ public class AutorDao {
                 instance.add(autor);
             }
             rs.close();
-            
-        }  
-        
+        }
         catch(SQLException ex) {
             ex.printStackTrace();
             System.out.println("Não existe este registro");
         } finally {
-            ConnectionDao.close();
+            ConnectionDao.close(prepSt);
         }
-        
         return instance;
     }
     
     public static AutorBean get(int id) {
         AutorBean autor = new AutorBean();
+        PreparedStatement prepSt = null;
         try {
-            ConnectionDao.open();
+            ConnectionDao.open();            
             String query = "SELECT * FROM " + TABLE_NAME 
                         + " WHERE `id` = " + id;
-            ConnectionDao.prepSt = ConnectionDao.con.prepareCall(query);
-            ResultSet rs = ConnectionDao.prepSt.executeQuery();
-            
+            prepSt = ConnectionDao.getPreparedStatement(query);
+            ResultSet rs = prepSt.executeQuery();
+
             if(rs.next()) {
                 autor.setId(rs.getInt("id"));
                 autor.setNome(rs.getString("nome"));
                 autor.setSituacao(rs.getInt("situacao"));
             }
-            
-            ConnectionDao.close();
-            
         } catch(SQLException ex) {
             ex.printStackTrace();
             System.out.println("Não existe este registro");
+        } finally {
+            ConnectionDao.close(prepSt);
         }
         return autor;
     }

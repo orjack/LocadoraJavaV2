@@ -30,7 +30,6 @@ public class JFrmMidia extends javax.swing.JFrame {
     public JFrmMidia() {
         initComponents();
         setLocationRelativeTo(null);
-        
         media = new MidiaBean();
         dao = new MediaDao();
     }
@@ -467,7 +466,7 @@ public class JFrmMidia extends javax.swing.JFrame {
         media.setAutor(autores.get(jcbxAutor.getSelectedIndex()));
         media.setDiretor(diretores.get(jcbxDiretor.getSelectedIndex()));
         media.setCategoria(jcbxCategoria.getSelectedIndex()+1);
-        media.setDataLancamento(jftDataLancamento.getText());
+        media.setAnoLancamento(Integer.valueOf(jftDataLancamento.getText()));
         media.setSinopse(jtxtSinopse.getText());
         media.setValorCusto(Double.valueOf(jftValor_compra.getText()));
         media.setValorLocacao(Double.valueOf(jftValor_locacao.getText()));
@@ -476,6 +475,7 @@ public class JFrmMidia extends javax.swing.JFrame {
         dao.save(media);
         clear();
         loadTable();
+        JOptionPane.showMessageDialog(null, "Salvo com sucesso");
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
     private void jbtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDeleteActionPerformed
@@ -503,7 +503,6 @@ public class JFrmMidia extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnDeleteActionPerformed
         
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        clear();
         jtxtId.setEditable(false);
         jTPanel.setEnabledAt(1, false);
         jTPanel.setSelectedComponent(jpListagemMidias);
@@ -537,7 +536,7 @@ public class JFrmMidia extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jbtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEditActionPerformed
-        int selected_index = jtbMidia.getSelectedRow();
+        selected_index = jtbMidia.getSelectedRow();
         jcbSituacao.setVisible(true);
         jcbSituacao.setEnabled(true);
         if (selected_index != -1) {
@@ -551,7 +550,7 @@ public class JFrmMidia extends javax.swing.JFrame {
             jcbxAutor.setSelectedItem(media.getAutor());
             jcbxDiretor.setSelectedItem(media.getDiretor());
             jcbxCategoria.setSelectedItem(media.getCategoria());
-            jftDataLancamento.setText(String.valueOf(media.getDataLancamento()));
+            jftDataLancamento.setText(String.valueOf(media.getAnoLancamento()));
             jtxtSinopse.setText(media.getSinopse());
             jftValor_compra.setText(String.valueOf(media.getValorCusto()));
             jftValor_locacao.setText(String.valueOf(media.getValorLocacao()));
@@ -562,7 +561,7 @@ public class JFrmMidia extends javax.swing.JFrame {
             jbtnSave.setEnabled(true);
 
         }else
-         JOptionPane.showMessageDialog(null, "Selecione um cliente"); 
+            JOptionPane.showMessageDialog(null, "Selecione um cliente"); 
     }//GEN-LAST:event_jbtnEditActionPerformed
 
     private void jbtnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnNewActionPerformed
@@ -573,22 +572,7 @@ public class JFrmMidia extends javax.swing.JFrame {
         jbtnSave.setEnabled(true);      
     }//GEN-LAST:event_jbtnNewActionPerformed
 
-    private void clear(){
-        jcbSituacao.setVisible(false);
-        jtxtId.setEditable(false);
-        jtxtId.setText(null);
-        jtxtTitulo.setText(null);
-        jftDataLancamento.setText(null);
-        jftValor_compra.setText(null);
-        jftValor_locacao.setText(null);
-        jtxtSinopse.setText(null);
-        jsQuantidade.setValue(0);
-        media = new MidiaBean();
-        jTPanel.setEnabledAt(0, true);
-        jTPanel.setEnabledAt(1, false);
-        jTPanel.setSelectedComponent(jpListagemMidias);
-    }
-    
+//<editor-fold defaultstate="collapsed" desc="Componentes">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -634,8 +618,24 @@ public class JFrmMidia extends javax.swing.JFrame {
     private javax.swing.JTextArea jtxtSinopse;
     private javax.swing.JTextField jtxtTitulo;
     // End of variables declaration//GEN-END:variables
+//</editor-fold>
 
-
+    private void clear(){
+        jcbSituacao.setVisible(false);
+        jtxtId.setEditable(false);
+        jtxtId.setText(null);
+        jtxtTitulo.setText(null);
+        jftDataLancamento.setText(null);
+        jftValor_compra.setText(null);
+        jftValor_locacao.setText(null);
+        jtxtSinopse.setText(null);
+        jsQuantidade.setValue(0);
+        media = new MidiaBean();
+        jTPanel.setEnabledAt(0, true);
+        jTPanel.setEnabledAt(1, false);
+        jTPanel.setSelectedComponent(jpListagemMidias);
+    }
+    
     public void loadTable(){
         Object titulo[] = {"Código", "Título", "Valor Compra", "Valor Locação", "Quantidade"};
         Object grade[][] = null;
